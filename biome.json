@@ -1,0 +1,80 @@
+{
+    "$schema": "https://biomejs.dev/schemas/2.3.3/schema.json",
+    "vcs": {
+        "enabled": true,
+        "clientKind": "git",
+        "useIgnoreFile": true
+    },
+    "files": {
+        "ignoreUnknown": false
+    },
+    "formatter": {
+        "enabled": true,
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineWidth": 100,
+        "includes": [
+            "**",
+            "!**/libs/**"
+        ]
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "recommended": true,
+            "style": {
+                "useConst": "on"
+            }
+        },
+        "includes": [
+            "**",
+            "!**/libs/**"
+        ]
+    },
+    "javascript": {
+        "formatter": {
+            "quoteStyle": "single"
+        }
+    },
+    "css": {
+        "formatter": {
+            "quoteStyle": "single"
+        }
+    },
+    "assist": {
+        "enabled": true,
+        "includes": [
+            "**",
+            "!**/libs/**",
+            "!**/src/game.js"
+        ],
+        "actions": {
+            "source": {
+                "organizeImports": {
+                    "level": "on",
+                    "options": {
+                        "identifierOrder": "natural",
+                        "groups": [
+                            ":PACKAGE:",
+                            "*/*",
+                            "*/core/**",
+                            "**/components/**",
+                            "**/helpers/**",
+                            "*/models/**",
+                            "*/ui/**",
+                            "**/assets/settings/*",
+                            "!**/assets/**",
+                            ":BLANK_LINE:",
+                            "**/assets/models/*",
+                            "**/assets/textures/*",
+                            ":BLANK_LINE:",
+                            "**/assets/fonts/*",
+                            "**/assets/images/*",
+                            ":BLANK_LINE:"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
