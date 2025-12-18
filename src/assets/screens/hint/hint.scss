@@ -1,0 +1,39 @@
+#hint {
+  z-index: 5;
+
+  .container {
+    position: absolute;
+  }
+
+  .hand {
+    position: absolute;
+    width: 20vmax;
+    height: 25vmax;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  &.visible {
+    animation: animHint 2s linear infinite;
+  }
+
+  @keyframes animHint {
+    0% {
+      opacity: 1;
+      transform: rotate(0) translate(0, 0) scale(1);
+    }
+    25% {
+      transform: rotate(-10deg) translate(-5vmax, -5vmax) scale(0.8);
+    }
+    50% {
+      opacity: 1;
+      transform: rotate(0) translate(0, 0) scale(1);
+    }
+    55% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}

@@ -1,0 +1,107 @@
+import { tweens } from '@alexfdr/three-game-components';
+import { Object3D, Raycaster, Vector3 } from 'three';
+import { Stitch } from './stitch';
+import { events } from '../helpers/events';
+import { getMaterialByColor } from '../helpers/utils/get-material-by-color';
+import { utils2d } from '../helpers/utils2d';
+import { EVENTS } from '../data/game-const';
+
+export class StitchesCollection {
+    constructor() {
+        this.parent = null;
+        this.group = new Object3D();
+        this.stitches = [];
+        this.localProgress = 0;
+        this.step = 1 / 50;
+
+        this.correctColored = [];
+        this.incorrectColored = [];
+
+        // this.onWrongColor = new signals.Signal()
+    }
+
+    init(parent, data) {
+        this.parent = parent;
+        this.parent.add(this.group);
+
+        const { correctColor, totalStitches } = data;
+        this.correctColor = correctColor;
+        this.totalStitches = totalStitches;
+        this.step = 1 / this.totalStitches;
+
+        this.addRaycaster();
+    }
+
+    addStitch(position, shouldSkip) {
+        const stitch = new Stitch();
+        const material = getMaterialByColor(this.stitchColor);
+        stitch.init(this.group, { position, material });
+        this.stitches.push(stitch);
+
+        if (shouldSkip) {
+            // stitch.group.visible = false
+            stitch.group.position.y -= 0.5;
+        }
+
+        if (this.stitchColor === this.correctColor) {
+            this.correctColored.push(stitch);
+        } else {
+            this.incorrectColored.push(stitch);
+            // this.onWrongColor.dispatch()
+            events.emit(EVENTS.WRONG_COLOR);
+        }
+    }
+
+    addRaycaster() {
+        this.raycaster = new Raycaster();
+        this.raycaster.near = 0;
+        this.raycaster.far = 10;
+    }
+
+    setColor(stitchColor) {
+        this.stitchColor = stitchColor;
+    }
+
+    fallOffIncorrectColored(callback = () => { }) {
+        this.incorrectColored.forEach((stitch) => {
+            const el = stitch.model;
+            const { x, y, z } = el.position;
+            const time = 500;
+            const angle = Math.atan2(z, x);
+            const dx = Math.cos(angle) * 3;
+            const dz = Math.sin(angle) * 3;
+            const dy = 3;
+            const delay = utils2d.randomInt(0, 100);
+
+            tweens.add(el.position, { x: x + dx, z: z + dz }, time, { delay });
+            tweens.add(el.position, { y: y + dy }, time * 0.5, { delay }).onComplete(() => {
+                tweens.zoomOut3(el, 0.01, time * 0.4, { easing: 'sineOut' });
+                tweens.add(el.position, { y: y - dy }, time * 0.5).onComplete(() => {
+                    callback();
+                    stitch.group.visible = false;
+                });
+            });
+        });
+    }
+
+    checkObjectsToSkip(origin, objectsToSkip) {
+        const pos = new Vector3().copy(origin);
+        pos.y = 5;
+        const direction = new Vector3(0, 1, 0);
+        this.raycaster.set(origin, direction);
+
+        const intersections = this.raycaster.intersectObjects(objectsToSkip, true);
+        return intersections.length > 0;
+    }
+
+    update(pathFollower, objectsToSkip = []) {
+        if (pathFollower.progress - this.localProgress > this.step) {
+            this.localProgress = this.step * (this.stitches.length + 1);
+            this.localProgress = Math.min(this.localProgress, 1);
+
+            const spawnPoint = pathFollower.pathCurve.getPointAt(this.localProgress);
+            const shouldSkip = this.checkObjectsToSkip(spawnPoint, objectsToSkip);
+            this.addStitch(spawnPoint, shouldSkip);
+        }
+    }
+}
