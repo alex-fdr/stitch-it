@@ -10,6 +10,7 @@ export class StitchesCollection {
     constructor() {
         this.parent = null;
         this.group = new Object3D();
+        this.group.name = 'stitches-collection';
         this.stitches = [];
         this.localProgress = 0;
         this.step = 1 / 50;
@@ -62,7 +63,7 @@ export class StitchesCollection {
         this.stitchColor = stitchColor;
     }
 
-    fallOffIncorrectColored(callback = () => { }) {
+    fallOffIncorrectColored(callback = () => {}) {
         this.incorrectColored.forEach((stitch) => {
             const el = stitch.model;
             const { x, y, z } = el.position;

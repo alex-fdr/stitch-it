@@ -5,6 +5,7 @@ import { DoubleSide, Mesh, MeshLambertMaterial, Object3D, PlaneGeometry } from '
 export class PathSparkleEffect {
     constructor() {
         this.group = new Object3D();
+        this.group.name = 'sparkle-group';
     }
 
     init(parent, data = {}) {
@@ -25,10 +26,11 @@ export class PathSparkleEffect {
             map: assets.textures.get('sparkle'),
             side: DoubleSide,
             transparent: true,
-            depthWrite: false
+            depthWrite: false,
             // color: 0xff0000
         });
         const mesh = new Mesh(geometry, material);
+        mesh.name = 'sparkle-model';
 
         this.model = mesh;
         this.group.add(this.model);
@@ -71,16 +73,18 @@ export class PathSparkleEffect {
 
         this.model.material.opacity = 0;
 
-        const time = this.moveTime;
-        const from = pathFollower.progress;
-        const to = Math.min(from + this.movePercent, 1);
-
         const scale = 0.94;
-        const tw = tweens.add({ x: from }, time, { to: { x: to }, easing: 'linear' });
+        const target = { x: 0 };
 
-        tw.onUpdate((el, k) => {
+        this.moveTween = tweens.add(target, {
+            time: this.moveTime,
+            to: { x: this.movePercent },
+            easing: 'linear',
+        });
+
+        this.moveTween.onUpdate((obj, k) => {
             if (!pathFollower.finished) {
-                const progress = Math.min(el.x, 1);
+                const progress = Math.min(obj.x, 1);
                 const point = pathFollower.getPointAtProgress(progress);
                 const { x, y, z } = point;
                 this.group.position.set(x * scale, y, z * scale);
@@ -97,7 +101,7 @@ export class PathSparkleEffect {
             }
         });
 
-        tw.onComplete(() => {
+        this.moveTween.onComplete(() => {
             this.moveTween = null;
 
             tweens.wait(1000).then(() => {
@@ -106,7 +110,5 @@ export class PathSparkleEffect {
                 }
             });
         });
-
-        this.moveTween = tw;
     }
 }

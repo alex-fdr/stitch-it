@@ -4,6 +4,7 @@ import { DoubleSide, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry } from 'th
 export class OverlayPlane {
     constructor() {
         this.group = new Object3D();
+        this.group.name = 'Overlay';
     }
 
     init(parent) {
@@ -25,10 +26,12 @@ export class OverlayPlane {
         });
 
         const mesh = new Mesh(geometry, material);
+        mesh.name = 'Horizontal Plane';
         this.model = mesh;
         this.group.add(this.model);
 
         const verticalMesh = new Mesh(geometry, material);
+        verticalMesh.name = 'Vertical Plane';
         this.verticalModel = verticalMesh;
         this.group.add(this.verticalModel);
     }
@@ -36,9 +39,12 @@ export class OverlayPlane {
     show() {
         this.group.visible = true;
 
-        const opacity = this.model.material.opacity;
+        const initialOpacity = this.model.material.opacity;
         this.model.material.opacity = 0;
-        tweens.add(this.model.material, 300, { to: { opacity } });
+        tweens.add(this.model.material, {
+            time: 300,
+            to: { opacity: initialOpacity },
+        });
     }
 
     hide() {

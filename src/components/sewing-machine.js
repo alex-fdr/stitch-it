@@ -7,11 +7,12 @@ export class SewingMachine {
         this.parent = null;
         this.model = null;
         this.group = new Object3D();
+        this.group.name = 'sewing-machine-group';
         this.onPathComplete = new Signal();
 
         this.status = {
             active: false,
-            pathComplete: false
+            pathComplete: false,
         };
     }
 
@@ -27,9 +28,11 @@ export class SewingMachine {
 
     addModel() {
         this.model = assets.models.get('sewing-machine');
+        this.model.name = 'sewing-machine';
         this.group.add(this.model);
 
         this.needle = this.model.getObjectByName('needle');
+        this.needle.name = 'needle';
     }
 
     setupMaterials() {
@@ -72,7 +75,12 @@ export class SewingMachine {
     }
 
     animateNeedle() {
-        this.tweenNeedle = tweens.add(this.needle.position, { y: 0.5 }, 50, { yoyo: true, repeat: -1 });
+        this.tweenNeedle = tweens.add(this.needle.position, {
+            time: 50,
+            to: { y: 0.5 },
+            yoyo: true,
+            repeat: -1,
+        });
     }
 
     stopNeedle() {
@@ -84,7 +92,5 @@ export class SewingMachine {
         this.needle.position.y = 0;
     }
 
-    update() {
-
-    }
+    update() {}
 }

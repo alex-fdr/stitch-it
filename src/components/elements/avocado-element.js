@@ -7,6 +7,7 @@ export class AvocadoElement {
         this.parent = null;
         this.model = null;
         this.group = new Object3D();
+        this.group.name = 'avocado-group';
         this.objectsToSkip = [];
     }
 
@@ -22,6 +23,7 @@ export class AvocadoElement {
 
     addModel(data) {
         this.model = assets.models.get('avocado');
+        this.model.name = 'avocado-model';
         this.group.add(this.model);
     }
 

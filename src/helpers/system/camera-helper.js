@@ -1,12 +1,13 @@
 import { tweens } from '@alexfdr/three-game-components';
 import { core } from '@alexfdr/three-game-core';
 import { Object3D, Vector3 } from 'three';
-import { cfg } from '../../data/config';
+import { cfg } from '../../data/cfg';
 import { CAMERA_SETTINGS } from '../../data/game-const';
 
 export class CameraHelper {
     constructor() {
         this.wrapper = new Object3D();
+        this.wrapper.name = 'camera-wrapper';
         this.offset = new Vector3();
         this.position = new Vector3();
         this.lerpSpeed = 0.5;
@@ -17,7 +18,7 @@ export class CameraHelper {
         this.wrapper.add(core.camera);
         core.scene.add(this.wrapper);
 
-        const preset = cfg.get('camera.preset') || 'default';
+        const preset = cfg.get('camera.preset', 'default');
         const { offset, position, rotation } = CAMERA_SETTINGS[preset];
 
         core.camera.position.copy(position);
@@ -28,8 +29,6 @@ export class CameraHelper {
             const { x, y, z } = rotation;
             this.wrapper.rotation.set(x, y, z);
         }
-
-        console.log(this.wrapper);
     }
 
     update(targetToFollow) {
@@ -43,11 +42,11 @@ export class CameraHelper {
         this.wrapper.position.lerp(this.position, this.lerpSpeed);
     }
 
-    focusOnTarget(target, time = 1000, callback = () => { }) {
+    focusOnTarget(target, time = 1000, callback = () => {}) {
         const to = new Vector3().copy(target.position);
         const camera = this.wrapper.children[0];
-        // tweens.add(this.wrapper.position, to, time);
-        // tweens.add(this.wrapper.rotation, { x: 0, y: 0, z: 0 }, time);
-        // tweens.add(camera.position, { y: 35 }, time).onComplete(() => callback());
+        tweens.add(this.wrapper.position, { time, to });
+        tweens.add(this.wrapper.rotation, { time, to: { x: 0, y: 0, z: 0 } });
+        tweens.add(camera.position, { time, to: { y: 35 } }).onComplete(() => callback());
     }
 }

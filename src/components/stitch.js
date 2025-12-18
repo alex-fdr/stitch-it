@@ -1,12 +1,13 @@
 import { assets } from '@alexfdr/three-game-core';
 import { Object3D } from 'three';
-import { cfg } from '../data/config';
+import { cfg } from '../data/cfg';
 
 export class Stitch {
     constructor() {
         this.parent = null;
         this.model = null;
         this.group = new Object3D();
+        this.group.name = 'stitch-group';
     }
 
     init(parent, data) {
@@ -20,6 +21,7 @@ export class Stitch {
 
     addModel() {
         this.model = assets.models.get('stitch');
+        this.model.name = 'stitch-model';
         this.group.add(this.model);
     }
 
@@ -38,7 +40,7 @@ export class Stitch {
         this.model.position.set(x, y, z);
         this.model.scale.multiplyScalar(1.3);
 
-        const scaleY = (cfg.get('levels')[0] === 'penguinLevel') ? 0.6 : 0.4;
+        const scaleY = cfg.get('levels')[0] === 'penguinLevel' ? 0.6 : 0.4;
         this.model.scale.y *= scaleY;
     }
 }

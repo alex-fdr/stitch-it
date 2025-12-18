@@ -5,6 +5,7 @@ export class Jeans {
     constructor() {
         this.parent = null;
         this.group = new Object3D();
+        this.group.name = 'jeans-group';
         this.size = 50;
     }
 
@@ -21,9 +22,10 @@ export class Jeans {
         const texture = assets.textures.get('jeans', { repeatX: 2, repeatY: 2 });
         const material = new MeshLambertMaterial({
             map: texture,
-            side: DoubleSide
+            side: DoubleSide,
         });
         const mesh = new Mesh(geometry, material);
+        mesh.name = 'jeans-mesh';
 
         this.model = mesh;
         this.group.add(this.model);
