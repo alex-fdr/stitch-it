@@ -13,8 +13,8 @@ import { DragHandler } from './helpers/drag-handler';
 // import { customEvents } from './helpers/custom-events';
 import { events } from './helpers/events';
 import { CameraHelper } from './helpers/system/camera-helper';
+import { cfg } from './data/cfg';
 import { colors } from './data/colors';
-import { cfg } from './data/config';
 import { EVENTS } from './data/game-const';
 
 export class LevelInstance {
@@ -35,7 +35,6 @@ export class LevelInstance {
             nextPatch: false,
             intro: false,
             gameover: false,
-
         };
     }
 
@@ -51,9 +50,9 @@ export class LevelInstance {
         this.addTutorialOverlay();
         this.addIntro();
 
-        // this.setupInput();
-        // this.setupHint();
-        // this.setupGameFlow();
+        this.setupInput();
+        this.setupHint();
+        this.setupGameFlow();
         this.start();
     }
 
@@ -65,7 +64,6 @@ export class LevelInstance {
     addElement(props) {
         this.element = elementsFactory[props.model]();
         this.element.init(this.group, props);
-        // this.element.debug()
     }
 
     addSewingMachine(props) {
@@ -76,8 +74,6 @@ export class LevelInstance {
     addPatchesCollection(props) {
         this.patchesCollection = new PatchesCollection();
         this.patchesCollection.init(this.group, props);
-
-        // this.patchesCollection.getPathFollower().debug()
     }
 
     addCameraHelper() {
@@ -87,7 +83,10 @@ export class LevelInstance {
 
     addPathSparkleEffect() {
         this.sparkle = new PathSparkleEffect();
-        this.sparkle.init(this.group, { movePercent: 0.1, moveTime: 2000 });
+        this.sparkle.init(this.group, {
+            movePercent: 0.1,
+            moveTime: 2000,
+        });
     }
 
     addTutorialOverlay() {
@@ -96,17 +95,17 @@ export class LevelInstance {
     }
 
     addIntro() {
-        console.log(cfg.get('intro.time'));
-        const time = cfg.get('intro.time') || 700;
         this.intro = new Intro();
-        this.intro.init({ time });
+        this.intro.init({
+            time: cfg.get('intro.time', 500),
+        });
     }
 
     setupInput() {
         core.input.setHandler(new DragHandler());
-        core.input.onDown.add((data) => this.handleOnDown(data));
-        core.input.onMove.add((data) => this.handleOnMove(data));
-        core.input.onUp.add((data) => this.handleOnUp(data));
+        core.input.onDown.add((status) => this.handleOnDown(status));
+        core.input.onMove.add((status) => this.handleOnMove(status));
+        core.input.onUp.add((status) => this.handleOnUp(status));
     }
 
     setupHint() {
@@ -124,7 +123,10 @@ export class LevelInstance {
             customEvents.areaComplete(this.patchesCollection.currentPatchId + 1);
 
             // 1st patch completed
-            if (this.patchesCollection.currentPatchId === 0 && cfg.get('convert.firstPatchComplete')) {
+            if (
+                this.patchesCollection.currentPatchId === 0 &&
+                cfg.get('convert.firstPatchComplete')
+            ) {
                 sqHelper.convert();
             }
 
@@ -163,7 +165,7 @@ export class LevelInstance {
         this.intro.onComplete.addOnce(() => {
             this.status.intro = false;
             // GM.trigger.start();
-            this.overlay.show();
+            /* this.overlay.show(); */
 
             // customEvents.introEnd();
             /* pixiUI.screens.get('choices').show(); */
@@ -190,15 +192,13 @@ export class LevelInstance {
         if (this.status.firstInteraction) {
             this.status.firstInteraction = false;
             this.overlay.hide();
-            screens.tutorial.hide();
+            // screens.tutorial.hide();
         }
 
         this.handleBtnPress();
     }
 
-    handleOnMove(data) {
-
-    }
+    handleOnMove(data) {}
 
     handleOnUp(data) {
         // GM.trigger.interactionComplete();
@@ -216,7 +216,10 @@ export class LevelInstance {
 
             customEvents.stitchNum(++this.status.btnPressedCounter);
 
-            if (this.status.btnPressedCounter === 1 && cfg.get('convert.firstInteractionComplete')) {
+            if (
+                this.status.btnPressedCounter === 1 &&
+                cfg.get('convert.firstInteractionComplete')
+            ) {
                 sqHelper.convertDelay(2000, () => {
                     this.handleOnUp();
                 });
@@ -281,20 +284,16 @@ export class LevelInstance {
             this.handleBtnPress();
         }
 
-        // if (this.sewingMachine.status.active) {
-        //     this.patchesCollection.update(this.sewingMachine.group, this.element.objectsToSkip, dt);
-        // }
+        if (this.sewingMachine.status.active) {
+            this.patchesCollection.update(this.sewingMachine.group, this.element.objectsToSkip, dt);
+        }
 
-        // if (!this.status.gameover) {
-        //     this.cameraHelper.update(this.sewingMachine.group);
-        // }
+        if (!this.status.gameover) {
+            this.cameraHelper.update(this.sewingMachine.group);
+        }
     }
 
-    resize() {
+    resize() {}
 
-    }
-
-    remove() {
-
-    }
+    remove() {}
 }
