@@ -69,7 +69,7 @@ export default {
         sqOnLastLevel: {
             type: 'bool',
             title: 'Show fake level after win/lose',
-            value: false
+            value: false,
         },
         sqOnTutorial: {
             type: 'bool',
@@ -80,10 +80,7 @@ export default {
         sqScreens: {
             type: 'list',
             title: 'Click on screen leads to store',
-            value: [
-                'win',
-                'lose'
-            ],
+            value: ['win', 'lose'],
             hidden: true,
         },
         autoConvertScreens: {
@@ -91,18 +88,18 @@ export default {
             title: 'Autoconvert screens. E.G.: { win: 2 }',
             value: {
                 win: 0,
-                lose: 0
-            }
+                lose: 0,
+            },
         },
         levels: {
             type: 'list',
             title: 'Levels.',
-            value: ['avocadoLevel']
+            value: ['avocadoLevel'],
             //   value: ['penguinLevel']
         },
         disableDelayedConvert: {
             type: 'bool',
-            title: 'If user didn\'t interacted last 6 sec - disable superquick',
+            title: "If user didn't interacted last 6 sec - disable superquick",
             value: true,
             hidden: true,
         },
@@ -121,7 +118,7 @@ export default {
             value: 700,
             min: 500,
             max: 1500,
-            step: 100
+            step: 100,
         },
     },
 
@@ -129,8 +126,8 @@ export default {
         textVisible: {
             type: 'bool',
             title: 'Text',
-            value: true
-        }
+            value: true,
+        },
     },
 
     sewingMachine: {
@@ -157,13 +154,13 @@ export default {
         firstInteractionComplete: {
             type: 'bool',
             title: 'First interacion complete',
-            value: false
+            value: false,
         },
 
         firstPatchComplete: {
             type: 'bool',
             title: 'First patch complete',
-            value: false
+            value: false,
         },
-    }
+    },
 };
