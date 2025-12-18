@@ -39,8 +39,8 @@ export class Game {
             ],
             textures: [
                 { key: 'jeans', file: textureJeans },
-                { key: 'sparkle', file: textureSparkle }
-            ]
+                { key: 'sparkle', file: textureSparkle },
+            ],
         });
 
         await pixiUI.init(core.renderer, width, height);
@@ -57,7 +57,6 @@ export class Game {
         //         const levelName = GM.config.get('levels')[0];
         //         const { stitchType, colors } = levelMediator.getLevelData(levelName).choices;
 
-
         //         this.screens.choices = new Choices(false, stitchType, colors);
         //         this.screens.ui = new UI(true);
         //         this.screens.hint = new HintTap(false);
@@ -71,7 +70,8 @@ export class Game {
         //     }, threeScene.renderer.domElement);
         // });
 
-        this.loadLevel(config.default.levels.value[0]);
+        levelMediator.loadLevel(config.default.levels.value[0]);
+
         htmlScreens.hide('loading');
 
         if (new URLSearchParams(window.location.search).has('debug')) {
@@ -79,7 +79,10 @@ export class Game {
                 scene: core.scene,
                 canvas: core.renderer.domElement,
                 camera: core.camera,
-                props: {},
+                options: {
+                    scene: true,
+                    props: true,
+                },
             });
         }
     }
@@ -89,11 +92,10 @@ export class Game {
         pixiUI.resize(width, height);
     }
 
-    loadLevel(name) {
-        levelMediator.loadLevel(name);
-    }
-
     update(time, deltaTime) {
+        core.render();
+        pixiUI.render();
+
         tweens.update(time);
         levelMediator.update(deltaTime * 60);
     }

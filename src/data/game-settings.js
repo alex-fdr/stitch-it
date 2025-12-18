@@ -45,9 +45,9 @@ export const gameSettings = {
         alpha: true,
         color: 0xff0000,
         opacity: 1,
-        shadow: true,
+        shadow: false,
         stencil: true,
-        needResetState: false,
+        needResetState: true,
     },
     camera: {
         fov: {
