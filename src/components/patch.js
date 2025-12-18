@@ -7,7 +7,7 @@ import { EVENTS } from '../data/game-const';
 export class Patch {
     constructor() {
         this.status = {
-            complete: false
+            complete: false,
         };
     }
 
@@ -16,6 +16,7 @@ export class Patch {
 
         const { correctColor: colorName, totalStitches, points } = routeData;
         const color = colors[colorName];
+
         this.addPathFollower(points, moveSpeed);
         this.addStitchesCollection(color, totalStitches);
     }
@@ -47,7 +48,7 @@ export class Patch {
         this.pathFollower.init(routePoints, {
             speed,
             reverseOnComplete: false,
-            rotationOnMove: false
+            rotationOnMove: false,
         });
     }
 

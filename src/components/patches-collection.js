@@ -1,6 +1,6 @@
 import { Patch } from './patch';
 import { events } from '../helpers/events';
-import { cfg } from '../data/config';
+import { cfg } from '../data/cfg';
 import { EVENTS } from '../data/game-const';
 
 export class PatchesCollection {
@@ -11,7 +11,7 @@ export class PatchesCollection {
 
         this.status = {
             correct: [],
-            completed: []
+            completed: [],
         };
     }
 
@@ -19,8 +19,7 @@ export class PatchesCollection {
         this.parent = parent;
 
         const { routes } = data;
-        const speed = cfg.get('sewingMachine.speed') || data.speed;
-
+        const speed = cfg.get('sewingMachine.speed', data.speed);
         routes.forEach((routeData) => {
             this.addPatch(routeData, speed);
         });

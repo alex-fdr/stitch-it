@@ -18,7 +18,7 @@ export class Intro {
 
         const from = { x: 0 };
         const to = { x: this.progress };
-        const tw = tweens.add(from, this.time, { to, easing: 'linear' });
+        const tw = tweens.add(from, { to, easing: 'linear', time: this.time });
 
         tw.onUpdate((obj) => {
             pathFollower.progress = obj.x;
