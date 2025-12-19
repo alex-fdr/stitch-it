@@ -24,6 +24,7 @@ export class LevelInstance {
         core.scene.add(this.group);
 
         this.data = null;
+        this.screens = pixiUI.screens;
 
         this.status = {
             firstInteraction: true,
@@ -53,6 +54,7 @@ export class LevelInstance {
         this.setupInput();
         this.setupHint();
         this.setupGameFlow();
+
         this.start();
     }
 
@@ -96,9 +98,7 @@ export class LevelInstance {
 
     addIntro() {
         this.intro = new Intro();
-        this.intro.init({
-            time: cfg.get('intro.time', 500),
-        });
+        this.intro.init({ time: cfg.get('intro.time', 500) });
     }
 
     setupInput() {
@@ -109,26 +109,18 @@ export class LevelInstance {
     }
 
     setupHint() {
-        /* this.hint = pixiUI.screens.get('hint');
-        this.hint.setTapPositions(pixiUI.screens.get('choices').getBtnPositions());
-        this.hint.moveToStart(); */
+        this.hint = this.screens.get('hint');
+        this.hint.setTapPositions(this.screens.get('choices').getBtnPositions());
+        this.hint.moveToStart();
     }
 
     setupGameFlow() {
         events.on(EVENTS.WRONG_COLOR, () => {
-            pixiUI.screens.get('ui').redOverlay.animate();
+            this.screens.get('ui').redOverlay.animate();
         });
 
         events.on(EVENTS.PATCH_COMPLETE, (isCorrect) => {
             customEvents.areaComplete(this.patchesCollection.currentPatchId + 1);
-
-            // 1st patch completed
-            if (
-                this.patchesCollection.currentPatchId === 0 &&
-                cfg.get('convert.firstPatchComplete')
-            ) {
-                sqHelper.convert();
-            }
 
             this.patchesCollection.setStatus(isCorrect);
             this.patchesCollection.nextPatch(this.sewingMachine.group);
@@ -136,39 +128,40 @@ export class LevelInstance {
             this.handleOnUp();
 
             this.status.nextPatch = true;
-
             // this.status.btnPressedCounter = 0
         });
 
         events.once(EVENTS.PATCHES_COMPLETE_ALL, (isWin) => {
             this.handleGameover(isWin);
         });
-        /* 
-                pixiUI.screens.get('choices').onBtnPress.add((type, color) => {
-                    // this.status.btnPressed = true
-                    this.status.selectedColor = color;
-                    this.status.btnPressedTime = performance.now();
-                }); */
 
-        // this.hint.onPress.add((index) => {
-        //   screens.choices.pressBtn(index, this.hint.holdTime - 100)
-        // })
+        this.screens.get('choices').onBtnPress.add((type, color) => {
+            this.status.btnPressed = true;
+            this.status.selectedColor = color;
+            this.status.btnPressedTime = performance.now();
+        });
 
-        // this.hint.onStop.add((index) => {
-        //   screens.choices.resetBtn(index)
-        // })
+        this.hint.onPress.add((index) => {
+            this.screens.get('choices').pressBtn(index, this.hint.holdTime - 100);
+        });
+
+        this.hint.onStop.add((index) => {
+            this.screens.get('choices').resetBtn(index);
+        });
 
         this.intro.onStart.addOnce(() => {
             this.status.intro = true;
         });
 
         this.intro.onComplete.addOnce(() => {
+            this.screens.get('tutorial').show();
+
             this.status.intro = false;
             // GM.trigger.start();
-            /* this.overlay.show(); */
+            this.overlay.show();
 
             // customEvents.introEnd();
-            /* pixiUI.screens.get('choices').show(); */
+            this.screens.get('choices').show();
         });
     }
 
@@ -192,7 +185,7 @@ export class LevelInstance {
         if (this.status.firstInteraction) {
             this.status.firstInteraction = false;
             this.overlay.hide();
-            // screens.tutorial.hide();
+            this.screens.get('tutorial').hide();
         }
 
         this.handleBtnPress();
@@ -209,12 +202,12 @@ export class LevelInstance {
         if (this.status.btnPressed) {
             this.status.btnPressedTime = 0;
 
-            screens.choices.hide();
+            this.screens.get('choices').hide();
             this.sewingMachine.activate();
             this.sparkle.hide();
             this.setColor(this.status.selectedColor);
 
-            customEvents.stitchNum(++this.status.btnPressedCounter);
+            // customEvents.stitchNum(++this.status.btnPressedCounter);
 
             if (
                 this.status.btnPressedCounter === 1 &&
@@ -227,7 +220,7 @@ export class LevelInstance {
 
             if (this.status.nextPatch) {
                 this.status.nextPatch = false;
-                customEvents.areaStart(this.patchesCollection.status.completed.length + 1);
+                // customEvents.areaStart(this.patchesCollection.status.completed.length + 1);
             }
         }
     }
@@ -237,7 +230,7 @@ export class LevelInstance {
 
         if (this.status.btnPressed) {
             this.status.btnPressed = false;
-            screens.choices.show();
+            pixiUI.screens.get('choices').show();
             this.sewingMachine.deactivate();
             this.sparkle.show(this.patchesCollection.getPathFollower());
         }

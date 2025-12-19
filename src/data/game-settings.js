@@ -41,6 +41,7 @@ export const gameSettings = {
         ],
     },
     renderer: {
+        parentId: 'game',
         antialias: true,
         alpha: true,
         color: 0xff0000,

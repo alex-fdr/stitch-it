@@ -13,7 +13,6 @@
     "dependencies": {
         "@alexfdr/three-game-components": "^1.0.8",
         "@alexfdr/three-game-core": "^1.0.24",
-        "@alexfdr/three-pixi-ui": "^1.0.0",
         "@tweenjs/tween.js": "^22.0.0",
         "pixi.js": "^8.14.0",
         "three": "^0.181.0"
