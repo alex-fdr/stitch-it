@@ -47,6 +47,10 @@ export class CameraHelper {
         const camera = this.wrapper.children[0];
         tweens.add(this.wrapper.position, { time, to });
         tweens.add(this.wrapper.rotation, { time, to: { x: 0, y: 0, z: 0 } });
-        tweens.add(camera.position, { time, to: { y: 35 } }).onComplete(() => callback());
+        tweens.add(camera.position, {
+            time,
+            to: { y: 35 },
+            onComplete: () => callback(),
+        });
     }
 }

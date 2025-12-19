@@ -40,10 +40,11 @@ export class RedOverlay {
             time: this.blinkTime,
             delay: this.blinkDelay,
             repeat: Infinity,
-        });
-        this.tween.onComplete(() => {
-            this.sprite.visible = false;
-            this.tween = null;
+            onComplete: () => {
+                this.sprite.visible = false;
+                tweens.remove(this.tween);
+                this.tween = null;
+            },
         });
     }
 }

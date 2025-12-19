@@ -1,5 +1,13 @@
 import { core } from '@alexfdr/three-game-core';
-import { CatmullRomCurve3, Mesh, MeshBasicMaterial, Object3D, SphereGeometry, TubeGeometry, Vector3 } from 'three';
+import {
+    CatmullRomCurve3,
+    Mesh,
+    MeshBasicMaterial,
+    Object3D,
+    SphereGeometry,
+    TubeGeometry,
+    Vector3,
+} from 'three';
 
 export class PathFollower {
     constructor() {
