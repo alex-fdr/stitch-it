@@ -1,7 +1,7 @@
 import { Patch } from './patch';
 import { events } from '../helpers/events';
 import { cfg } from '../data/cfg';
-import { EVENTS } from '../data/game-const';
+import { PATCHES_COMPLETE_ALL } from '../data/game-const';
 
 export class PatchesCollection {
     constructor() {
@@ -68,7 +68,7 @@ export class PatchesCollection {
             }
         });
 
-        events.emit(EVENTS.PATCHES_COMPLETE_ALL, isAllPatchesCorrect);
+        events.emit(PATCHES_COMPLETE_ALL, isAllPatchesCorrect);
     }
 
     fallOffIncorrectColoredPatches(callback) {

@@ -2,7 +2,7 @@ import { PathFollower } from './path-follower';
 import { StitchesCollection } from './stitches-collection';
 import { events } from '../helpers/events';
 import { colors } from '../data/colors';
-import { EVENTS } from '../data/game-const';
+import { PATCH_COMPLETE } from '../data/game-const';
 
 export class Patch {
     constructor() {
@@ -60,7 +60,7 @@ export class Patch {
     checkFinalResult() {
         const { incorrectColored } = this.stitchesCollection;
         const isAllStitchesCorrectColor = incorrectColored.length === 0;
-        events.emit(EVENTS.PATCH_COMPLETE, isAllStitchesCorrectColor);
+        events.emit(PATCH_COMPLETE, isAllStitchesCorrectColor);
     }
 
     update(objectToMove, objectsToSkip, dt) {

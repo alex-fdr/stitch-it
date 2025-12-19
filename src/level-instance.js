@@ -10,12 +10,11 @@ import { PatchesCollection } from './components/patches-collection';
 import { PathSparkleEffect } from './components/path-sparkle-effect';
 import { SewingMachine } from './components/sewing-machine';
 import { DragHandler } from './helpers/drag-handler';
-// import { customEvents } from './helpers/custom-events';
 import { events } from './helpers/events';
 import { CameraHelper } from './helpers/system/camera-helper';
 import { cfg } from './data/cfg';
 import { colors } from './data/colors';
-import { EVENTS } from './data/game-const';
+import { PATCH_COMPLETE, PATCHES_COMPLETE_ALL, WRONG_COLOR } from './data/game-const';
 
 export class LevelInstance {
     constructor() {
@@ -115,13 +114,11 @@ export class LevelInstance {
     }
 
     setupGameFlow() {
-        events.on(EVENTS.WRONG_COLOR, () => {
+        events.on(WRONG_COLOR, () => {
             this.screens.get('ui').redOverlay.animate();
         });
 
-        events.on(EVENTS.PATCH_COMPLETE, (isCorrect) => {
-            customEvents.areaComplete(this.patchesCollection.currentPatchId + 1);
-
+        events.on(PATCH_COMPLETE, (isCorrect) => {
             this.patchesCollection.setStatus(isCorrect);
             this.patchesCollection.nextPatch(this.sewingMachine.group);
             this.sewingMachine.deactivate();
@@ -131,7 +128,7 @@ export class LevelInstance {
             // this.status.btnPressedCounter = 0
         });
 
-        events.once(EVENTS.PATCHES_COMPLETE_ALL, (isWin) => {
+        events.once(PATCHES_COMPLETE_ALL, (isWin) => {
             this.handleGameover(isWin);
         });
 
@@ -237,24 +234,24 @@ export class LevelInstance {
     }
 
     handleGameover(isWin) {
-        console.log('game over');
+        console.log('game over', isWin);
 
         this.status.gameover = true;
 
         this.sewingMachine.deactivate();
         this.sewingMachine.hide();
 
-        screens.choices.disable();
-        screens.hint.deactivate();
-        screens.ui.hide();
+        this.screens.get('choices').disable();
+        this.screens.get('hint').deactivate();
+        this.screens.get('ui').hide();
 
         this.cameraHelper.focusOnTarget(this.element.model, 1000, () => {
             if (isWin) {
-                sqHelper.levelWin();
+                /* sqHelper.levelWin(); */
             } else {
                 this.patchesCollection.fallOffIncorrectColoredPatches(() => {
                     tweens.wait(200).then(() => {
-                        sqHelper.levelLose();
+                        /* sqHelper.levelLose(); */
                     });
                 });
             }
@@ -287,6 +284,5 @@ export class LevelInstance {
     }
 
     resize() {}
-
     remove() {}
 }
