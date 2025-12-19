@@ -43,13 +43,13 @@ import imageTap05 from './assets/images/tap/tap-pointer05.png';
 import imageTap06 from './assets/images/tap/tap-pointer06.png';
 import imageTap07 from './assets/images/tap/tap-pointer07.png';
 
-import config from './assets/settings/config';
 import { levelMediator } from './level-mediator';
 import { debug } from '@alexfdr/three-debug-gui';
 import { UIScreen } from './screens/ui';
 import { TutorialScreen } from './screens/tutorial';
 import { ChoicesScreen } from './screens/choices';
 import { HintTap } from './helpers/ui/hint-tap';
+import { cfg } from './data/cfg';
 
 export class Game {
     constructor() {
@@ -104,10 +104,9 @@ export class Game {
         core.onUpdate.add(this.update, this);
         core.onResize.add(this.resize, this);
 
-        pixiUI.renderer.events.setCursor('crosshair');
         pixiUI.renderer.events.setTargetElement(core.renderer.domElement);
 
-        const levelName = config.default.levels.value[0];
+        const levelName = cfg.get('levels')[0];
         const { stage, screens } = pixiUI;
         const { stitchType, colors } = levelMediator.getLevelData(levelName).choices;
         const screenProps = { parent: stage, visible: false };
@@ -117,28 +116,9 @@ export class Game {
         screens.set('choices', new ChoicesScreen({ ...screenProps, type: stitchType, colors }));
         screens.set('hint', new HintTap(screenProps));
 
-        // utils.loadAll([threeAssets.init]).then(() => {
-        //     pixiUI.init(() => {
-        //         const levelName = GM.config.get('levels')[0];
-        //         const { stitchType, colors } = levelMediator.getLevelData(levelName).choices;
-
-        //         this.screens.choices = new Choices(false, stitchType, colors);
-        //         this.screens.ui = new UI(true);
-        //         this.screens.hint = new HintTap(false);
-        //         this.screens.win = new Win();
-        //         this.screens.lose = new Lose();
-        //         this.screens.tutorial = new TutorialScreen();
-
-        //         screens.addMultiple(this.screens);
-
-        //         GM.trigger.loadComplete();
-        //     }, threeScene.renderer.domElement);
-        // });
-
         levelMediator.loadLevel(levelName);
-        this.resize(width, height);
-
         htmlScreens.hide('loading');
+        this.resize(width, height);
 
         // if (new URLSearchParams(window.location.search).has('debug')) {
         //     debug.init({
