@@ -59,7 +59,7 @@ export class ChoicesScreen {
         }
 
         if (this.hideTween) {
-            this.hideTween.stop();
+            tweens.remove(this.hideTween);
             this.hideTween = null;
         }
 
@@ -69,7 +69,7 @@ export class ChoicesScreen {
 
     hide() {
         if (this.showTween) {
-            this.showTween.stop();
+            tweens.remove(this.showTween);
             this.showTween = null;
         }
 

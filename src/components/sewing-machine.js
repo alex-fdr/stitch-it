@@ -79,12 +79,13 @@ export class SewingMachine {
             time: 50,
             to: { y: 0.5 },
             yoyo: true,
-            repeat: -1,
+            repeat: Infinity,
         });
     }
 
     stopNeedle() {
         if (this.tweenNeedle) {
+            tweens.remove(this.tweenNeedle);
             this.tweenNeedle.stop();
             this.tweenNeedle = null;
         }

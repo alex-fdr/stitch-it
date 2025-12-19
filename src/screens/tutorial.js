@@ -30,7 +30,7 @@ export class TutorialScreen {
 
     show() {
         this.group.visible = true;
-        tweens.fadeIn(this.group);
+        tweens.fadeIn(this.group, { time: 300 });
     }
 
     hide() {

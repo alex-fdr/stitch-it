@@ -1,5 +1,5 @@
 import { tweens } from '@alexfdr/three-game-components';
-import { Assets, Container, Rectangle, Sprite } from 'pixi.js';
+import { Assets, Container, Sprite } from 'pixi.js';
 
 export class ButtonIcon {
     constructor(baseKey, iconKey) {
@@ -36,11 +36,15 @@ export class ButtonIcon {
     }
 
     showPressEffect(holdTime = 0) {
-        this.tween = tweens.pulse(this.group, 0.85, 300, { repeatDelay: holdTime });
+        this.tween = tweens.pulse(this.group, { scaleTo: 0.85, time: 300, repeatDelay: holdTime });
     }
 
     reset() {
-        this.tween?.stop();
+        if (this.tween) {
+            tweens.remove(this.tween);
+            this.tween.stop();
+            this.tween = null;
+        }
         this.group.scale.set(1, 1);
     }
 

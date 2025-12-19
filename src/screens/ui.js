@@ -30,7 +30,7 @@ export class UIScreen {
     }
 
     animate() {
-        tweens.fadeIn(this.group, 300);
+        tweens.fadeIn(this.group, { time: 300 });
     }
 
     handlePortrait() {

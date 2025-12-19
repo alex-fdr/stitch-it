@@ -4,7 +4,7 @@ import { Stitch } from './stitch';
 import { events } from '../helpers/events';
 import { getMaterialByColor } from '../helpers/utils/get-material-by-color';
 import { utils2d } from '../helpers/utils2d';
-import { EVENTS } from '../data/game-const';
+import { WRONG_COLOR } from '../data/game-const';
 
 export class StitchesCollection {
     constructor() {
@@ -49,7 +49,7 @@ export class StitchesCollection {
         } else {
             this.incorrectColored.push(stitch);
             // this.onWrongColor.dispatch()
-            events.emit(EVENTS.WRONG_COLOR);
+            events.emit(WRONG_COLOR);
         }
     }
 
@@ -74,13 +74,22 @@ export class StitchesCollection {
             const dy = 3;
             const delay = utils2d.randomInt(0, 100);
 
-            tweens.add(el.position, { x: x + dx, z: z + dz }, time, { delay });
-            tweens.add(el.position, { y: y + dy }, time * 0.5, { delay }).onComplete(() => {
-                tweens.zoomOut3(el, 0.01, time * 0.4, { easing: 'sineOut' });
-                tweens.add(el.position, { y: y - dy }, time * 0.5).onComplete(() => {
-                    callback();
-                    stitch.group.visible = false;
-                });
+            tweens.add(el.position, { to: { x: x + dx, z: z + dz }, time, delay });
+            tweens.add(el.position, {
+                to: { y: y + dy },
+                time: time * 0.5,
+                delay,
+                onComplete: () => {
+                    tweens.zoomOut3(el, { scaleTo: 0.01, time: time * 0.4, easing: 'sineOut' });
+                    tweens.add(el.position, {
+                        to: { y: y - dy },
+                        time: time * 0.5,
+                        onComplete: () => {
+                            callback();
+                            stitch.group.visible = false;
+                        },
+                    });
+                },
             });
         });
     }

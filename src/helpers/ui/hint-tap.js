@@ -70,7 +70,7 @@ export class HintTap {
     }
 
     animate() {
-        tweens.fadeIn(this.group, 300);
+        tweens.fadeIn(this.group, { time: 300 });
 
         this.status.stopped = false;
 
@@ -104,7 +104,7 @@ export class HintTap {
 
     hold() {
         this.pointer.stop();
-        this.holdTween = tweens.timeout(this.holdTime, () => {
+        this.holdTween = tweens.wait(this.holdTime).then(() => {
             if (this.status.playing && !this.status.stopped) {
                 this.pointer.play();
             }
@@ -116,12 +116,18 @@ export class HintTap {
         this.status.stopped = true;
         this.pointer.onComplete = () => {};
         this.pointer.onFrameChange = () => {};
-        this.moveTween?.stop();
         this.onStop.dispatch(this.tapIndex);
         this.tapIndex = 0;
         this.pointer.gotoAndStop(0);
 
+        if (this.moveTween) {
+            tweens.remove(this.moveTween);
+            this.moveTween.stop();
+            this.moveTween = null;
+        }
+
         if (this.holdTween) {
+            tweens.remove(this.holdTween);
             this.holdTween.stop();
             this.holdTween = null;
         }
@@ -130,12 +136,13 @@ export class HintTap {
     moveToNextItem(callback) {
         this.tapIndex = (this.tapIndex + 1) % this.tapPositions.length;
 
-        const dest = this.getPositionByIndex(this.tapIndex);
-        const tween = tweens.add(this.pointer.position, dest, 200, { easing: 'sineOut' });
-
-        this.moveTween = tween.onComplete(() => {
-            callback();
+        const tween = tweens.add(this.pointer.position, {
+            to: this.getPositionByIndex(this.tapIndex),
+            time: 200,
+            easing: 'sineOut',
         });
+
+        this.moveTween = tween.onComplete(() => callback());
     }
 
     moveToStart() {
