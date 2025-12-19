@@ -1,7 +1,6 @@
-import { tweens } from '@alexfdr/three-game-components';
+import { events, tweens } from '@alexfdr/three-game-components';
 import { Object3D, Raycaster, Vector3 } from 'three';
 import { Stitch } from './stitch';
-import { events } from '../helpers/events';
 import { getMaterialByColor } from '../helpers/utils/get-material-by-color';
 import { utils2d } from '../helpers/utils2d';
 import { WRONG_COLOR } from '../data/game-const';

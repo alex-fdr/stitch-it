@@ -1,5 +1,5 @@
+import { events } from '@alexfdr/three-game-components';
 import { Patch } from './patch';
-import { events } from '../helpers/events';
 import { cfg } from '../data/cfg';
 import { PATCHES_COMPLETE_ALL } from '../data/game-const';
 

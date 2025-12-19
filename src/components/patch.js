@@ -1,6 +1,6 @@
+import { events } from '@alexfdr/three-game-components';
 import { PathFollower } from './path-follower';
 import { StitchesCollection } from './stitches-collection';
-import { events } from '../helpers/events';
 import { colors } from '../data/colors';
 import { PATCH_COMPLETE } from '../data/game-const';
 
