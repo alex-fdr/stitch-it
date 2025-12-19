@@ -5,7 +5,7 @@ class LevelMediator {
     constructor() {
         this.levels = {
             avocadoLevel: levels.avocadoLevel,
-            penguinLevel: levels.penguinLevel
+            penguinLevel: levels.penguinLevel,
         };
         // this.instances = [];
         this.levelInstance = null;

@@ -1,5 +1,4 @@
 import { assets, core } from '@alexfdr/three-game-core';
-import { pixiUI } from '@alexfdr/three-pixi-ui';
 // import { HintTap } from './helpers/ui/hint-tap';
 // import { levelMediator } from './level-mediator';
 // import { Choices } from './screens/choices';
@@ -7,7 +6,7 @@ import { pixiUI } from '@alexfdr/three-pixi-ui';
 // import { TutorialScreen } from './screens/tutorial';
 // import { UI } from './screens/ui';
 // import { Win } from './screens/win';
-import { htmlScreens, tweens } from '@alexfdr/three-game-components';
+import { htmlScreens, tweens, pixiUI } from '@alexfdr/three-game-components';
 import { gameSettings } from './data/game-settings';
 import { Assets as PixiAssets } from 'pixi.js';
 
@@ -18,9 +17,39 @@ import modelStitch from './assets/models/stitch.glb';
 import textureJeans from './assets/textures/jeans.jpg';
 import textureSparkle from './assets/textures/sparkle.png';
 
+// pixi.js images and fonts
+import gamefont from './assets/fonts/gamefont.woff';
+import imageButtonBase from './assets/images/button-base.png';
+import imageButton from './assets/images/button.png';
+import imageDummyWhite from './assets/images/dummy-white.png';
+import imageLogo from './assets/images/logo.png';
+import imageMarkGreen from './assets/images/mark-green.png';
+import imageMarkRed from './assets/images/mark-red.png';
+import imageOverlayRed from './assets/images/overlay-red.png';
+import imageThreadsPink from './assets/images/threads-pink.png';
+import imageThreadsWhite from './assets/images/threads-white.png';
+import imageYarnGreen from './assets/images/yarn-green.png';
+import imageYarnYellow from './assets/images/yarn-yellow.png';
+import imageParticleBlue from './assets/images/particles/particle-blue.png';
+import imageParticleGreen from './assets/images/particles/particle-green.png';
+import imageParticleOrange from './assets/images/particles/particle-orange.png';
+import imageParticlePurple from './assets/images/particles/particle-purple.png';
+import imageTap00 from './assets/images/tap/tap-pointer00.png';
+import imageTap01 from './assets/images/tap/tap-pointer01.png';
+import imageTap02 from './assets/images/tap/tap-pointer02.png';
+import imageTap03 from './assets/images/tap/tap-pointer03.png';
+import imageTap04 from './assets/images/tap/tap-pointer04.png';
+import imageTap05 from './assets/images/tap/tap-pointer05.png';
+import imageTap06 from './assets/images/tap/tap-pointer06.png';
+import imageTap07 from './assets/images/tap/tap-pointer07.png';
+
 import config from './assets/settings/config';
 import { levelMediator } from './level-mediator';
 import { debug } from '@alexfdr/three-debug-gui';
+import { UIScreen } from './screens/ui';
+import { TutorialScreen } from './screens/tutorial';
+import { ChoicesScreen } from './screens/choices';
+import { HintTap } from './helpers/ui/hint-tap';
 
 export class Game {
     constructor() {
@@ -45,12 +74,48 @@ export class Game {
 
         await pixiUI.init(core.renderer, width, height);
 
-        // await PixiAssets.load([
-        //     { alias: '', src: },
-        // ]);
+        await PixiAssets.load([
+            { alias: 'gamefont', src: gamefont },
+            { alias: 'button-base', src: imageButtonBase },
+            { alias: 'button', src: imageButton },
+            { alias: 'dummy-white', src: imageDummyWhite },
+            { alias: 'logo', src: imageLogo },
+            { alias: 'mark-green', src: imageMarkGreen },
+            { alias: 'mark-red', src: imageMarkRed },
+            { alias: 'overlay-red', src: imageOverlayRed },
+            { alias: 'threads-pink', src: imageThreadsPink },
+            { alias: 'threads-white', src: imageThreadsWhite },
+            { alias: 'yarn-green', src: imageYarnGreen },
+            { alias: 'yarn-yellow', src: imageYarnYellow },
+            { alias: 'particle-blue', src: imageParticleBlue },
+            { alias: 'particle-green', src: imageParticleGreen },
+            { alias: 'particle-orange', src: imageParticleOrange },
+            { alias: 'particle-purple', src: imageParticlePurple },
+            { alias: 'tap-pointer00', src: imageTap00 },
+            { alias: 'tap-pointer01', src: imageTap01 },
+            { alias: 'tap-pointer02', src: imageTap02 },
+            { alias: 'tap-pointer03', src: imageTap03 },
+            { alias: 'tap-pointer04', src: imageTap04 },
+            { alias: 'tap-pointer05', src: imageTap05 },
+            { alias: 'tap-pointer06', src: imageTap06 },
+            { alias: 'tap-pointer07', src: imageTap07 },
+        ]);
 
         core.onUpdate.add(this.update, this);
         core.onResize.add(this.resize, this);
+
+        pixiUI.renderer.events.setCursor('crosshair');
+        pixiUI.renderer.events.setTargetElement(core.renderer.domElement);
+
+        const levelName = config.default.levels.value[0];
+        const { stage, screens } = pixiUI;
+        const { stitchType, colors } = levelMediator.getLevelData(levelName).choices;
+        const screenProps = { parent: stage, visible: false };
+
+        screens.set('ui', new UIScreen(screenProps));
+        screens.set('tutorial', new TutorialScreen(screenProps));
+        screens.set('choices', new ChoicesScreen({ ...screenProps, type: stitchType, colors }));
+        screens.set('hint', new HintTap(screenProps));
 
         // utils.loadAll([threeAssets.init]).then(() => {
         //     pixiUI.init(() => {
@@ -70,21 +135,22 @@ export class Game {
         //     }, threeScene.renderer.domElement);
         // });
 
-        levelMediator.loadLevel(config.default.levels.value[0]);
+        levelMediator.loadLevel(levelName);
+        this.resize(width, height);
 
         htmlScreens.hide('loading');
 
-        if (new URLSearchParams(window.location.search).has('debug')) {
-            debug.init({
-                scene: core.scene,
-                canvas: core.renderer.domElement,
-                camera: core.camera,
-                options: {
-                    scene: true,
-                    props: true,
-                },
-            });
-        }
+        // if (new URLSearchParams(window.location.search).has('debug')) {
+        //     debug.init({
+        //         scene: core.scene,
+        //         canvas: core.renderer.domElement,
+        //         camera: core.camera,
+        //         options: {
+        //             scene: true,
+        //             props: true,
+        //         },
+        //     });
+        // }
     }
 
     resize(width, height) {

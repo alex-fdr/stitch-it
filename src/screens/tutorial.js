@@ -1,21 +1,31 @@
 import { tweens } from '@alexfdr/three-game-components';
-import { factory } from '../helpers/pixi/pixi-factory';
+import { Container, Text } from 'pixi.js';
+import { cfg } from '../data/cfg';
+import { locale } from '../data/locale';
 
 export class TutorialScreen {
-    constructor(visible = false) {
-        this.text = factory.text('tutorial', {
-            color: '#ffffff',
-            stroke: '#222222',
-            strokeThickness: 5,
-            letterSpacing: 2
+    constructor({ parent, visible }) {
+        this.text = new Text({
+            text: locale.tutorial.text,
+            anchor: 0.5,
+            visible: cfg.get('tutorial.textVisible'),
+            style: {
+                fontSize: locale.tutorial.fontSize,
+                fill: '#ffffff',
+                letterSpacing: 2,
+                stroke: {
+                    color: '#222222',
+                    width: 5,
+                },
+            },
         });
 
-        this.group = factory.group([
-            this.text,
-        ], visible, 'tutorial');
-
-        const textVisible = config.get('tutorial.textVisible');
-        this.text.visible = textVisible;
+        this.group = new Container({
+            parent,
+            visible,
+            children: [this.text],
+            label: 'tutorial',
+        });
     }
 
     show() {
@@ -31,15 +41,13 @@ export class TutorialScreen {
         this.group.visible = false;
     }
 
-    orientationPortrait(cx, cy) {
+    handlePortrait() {
         this.group.scale.set(1);
-        this.group.position.set(cx, cy);
         this.text.position.set(0, -340);
     }
 
-    orientationLandscape(cx, cy, factor) {
+    handleLandscape(factor) {
         this.group.scale.set(factor);
-        this.group.position.set(cx, cy);
         this.text.position.set(0, -340);
     }
 }

@@ -1,5 +1,6 @@
 import { tweens } from '@alexfdr/three-game-components';
-import { factory } from '../helpers/pixi/pixi-factory';
+import { Signal } from '@alexfdr/three-game-core';
+import { Container } from 'pixi.js';
 import { ButtonIcon } from '../helpers/ui/button-icon';
 
 // const BTN_POSITIONS = [
@@ -7,15 +8,24 @@ import { ButtonIcon } from '../helpers/ui/button-icon';
 //   { x: 120, y: 260 },
 // ]
 
-
-export class Choices {
-    constructor(visible = false, type = 'yarn', colors = []) {
+export class ChoicesScreen {
+    constructor({ parent, visible = false, type = 'yarn', colors = [] }) {
         this.type = type;
         this.colors = colors;
-        this.group = factory.group([], visible, 'choices');
 
-        this.onBtnPress = new signals.Signal();
-        this.addAllButtons();
+        this.group = new Container({
+            parent,
+            visible,
+            label: 'choices',
+            children: [],
+        });
+
+        this.onBtnPress = new Signal();
+
+        this.buttons = [
+            this.addButton(this.type, this.colors[0], -1),
+            this.addButton(this.type, this.colors[1], 1),
+        ];
 
         this.showTime = 1;
         this.showTween = null;
@@ -24,15 +34,8 @@ export class Choices {
         this.hideTween = null;
 
         this.status = {
-            enabled: true
+            enabled: true,
         };
-    }
-
-    addAllButtons() {
-        this.buttons = [
-            this.addButton(this.type, this.colors[0], -1),
-            this.addButton(this.type, this.colors[1], 1),
-        ];
     }
 
     addButton(type, color, offsetIndex = 0) {
@@ -61,7 +64,7 @@ export class Choices {
         }
 
         this.group.visible = true;
-        this.showTween = tweens.fadeIn(this.group, this.showTime);
+        this.showTween = tweens.fadeIn(this.group, { time: this.showTime });
     }
 
     hide() {
@@ -70,9 +73,11 @@ export class Choices {
             this.showTween = null;
         }
 
-        this.hideTween = tweens.fadeOut(this.group, this.hideTime);
-        this.hideTween.onComplete(() => {
-            this.group.visible = false;
+        this.hideTween = tweens.fadeOut(this.group, {
+            time: this.hideTime,
+            onComplete: () => {
+                this.group.visible = false;
+            },
         });
     }
 
@@ -89,18 +94,14 @@ export class Choices {
         this.buttons[index].reset();
     }
 
-    orientationPortrait(cx, cy) {
+    handlePortrait() {
         this.group.scale.set(1);
-
-        this.group.position.set(cx, cy);
         this.buttons[0].setPosition(-120, 260);
         this.buttons[1].setPosition(120, 260);
     }
 
-    orientationLandscape(cx, cy, factor) {
+    handleLandscape(factor) {
         this.group.scale.set(factor);
-
-        this.group.position.set(cx, cy);
         this.buttons[0].setPosition(-120, 260);
         this.buttons[1].setPosition(120, 260);
     }

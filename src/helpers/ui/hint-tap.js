@@ -1,26 +1,40 @@
 import { tweens } from '@alexfdr/three-game-components';
-import { factory } from '../../helpers/pixi/pixi-factory';
+import { Signal } from '@alexfdr/three-game-core';
+import { AnimatedSprite, Assets, Container } from 'pixi.js';
 
 // TODO: Rewrite hint logic, make code looks less ugly
 
 export class HintTap {
     constructor(visible = false) {
-        this.pointer = factory.animatedSprite({
-            key: 'tap-pointer',
-            speed: 0.8,
-            loop: false,
-            yoyo: true,
-            autostart: false,
-            frames: { from: 0, to: 7, digits: 2 },
-            // remapFrames: { 1: [9], 2: [8], 3: [7], 4: [6] }
+        const pointerTextures = [];
+
+        for (let i = 0; i <= 7; i++) {
+            pointerTextures.push(Assets.get(`tap-pointer0${i}`));
+        }
+
+        this.pointer = new AnimatedSprite({
+            anchor: 0.5,
+            textures: pointerTextures,
         });
+        // this.pointer = factory.animatedSprite({
+        //     key: 'tap-pointer',
+        //     speed: 0.8,
+        //     loop: false,
+        //     yoyo: true,
+        //     autostart: false,
+        //     frames: { from: 0, to: 7, digits: 2 },
+        //     // remapFrames: { 1: [9], 2: [8], 3: [7], 4: [6] }
+        // });
 
         this.pointer.scale.set(0.8);
 
-        this.group = factory.group([this.pointer], visible);
+        this.group = new Container({
+            visible,
+            children: [this.pointer],
+        });
 
-        this.onPress = new signals.Signal();
-        this.onStop = new signals.Signal();
+        this.onPress = new Signal();
+        this.onStop = new Signal();
 
         this.tapPositions = [];
         this.tapOffset = { x: 50, y: 70 };
@@ -31,7 +45,7 @@ export class HintTap {
         this.status = {
             playing: false,
             stopped: false,
-            active: true
+            active: true,
         };
     }
 
@@ -100,8 +114,8 @@ export class HintTap {
     stopAnimation() {
         this.status.playing = false;
         this.status.stopped = true;
-        this.pointer.onComplete = () => { };
-        this.pointer.onFrameChange = () => { };
+        this.pointer.onComplete = () => {};
+        this.pointer.onFrameChange = () => {};
         this.moveTween?.stop();
         this.onStop.dispatch(this.tapIndex);
         this.tapIndex = 0;
@@ -128,12 +142,12 @@ export class HintTap {
         this.setPositionByIndex(0);
     }
 
-    orientationPortrait(cx, cy) {
+    handlePortrait(cx, cy) {
         this.group.scale.set(1);
         this.group.position.set(cx, cy);
     }
 
-    orientationLandscape(cx, cy, factor) {
+    handleLandscape(cx, cy, factor) {
         this.group.scale.set(factor);
         this.group.position.set(cx, cy);
     }

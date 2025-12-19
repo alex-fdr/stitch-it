@@ -1,11 +1,20 @@
 import { tweens } from '@alexfdr/three-game-components';
-import { factory } from '../../helpers/pixi/pixi-factory';
+import { Assets, Container, Rectangle, Sprite } from 'pixi.js';
 
 export class ButtonIcon {
     constructor(baseKey, iconKey) {
-        this.base = factory.sprite(baseKey);
-        this.icon = factory.sprite(iconKey);
-        this.group = factory.group([this.base, this.icon]);
+        this.base = new Sprite({
+            texture: Assets.get(baseKey),
+            anchor: 0.5,
+            interactive: true,
+        });
+        this.icon = new Sprite({
+            texture: Assets.get(iconKey),
+            anchor: 0.5,
+        });
+        this.group = new Container({
+            children: [this.base, this.icon],
+        });
     }
 
     getPosition() {
@@ -21,9 +30,9 @@ export class ButtonIcon {
     }
 
     setInputHandler(handler) {
-        this.base.interactive = true;
+        this.base.eventMode = 'static';
+        this.base.cursor = 'pointer';
         this.base.on('pointerdown', handler);
-        console.log(this.base.listeners('pointerdown'));
     }
 
     showPressEffect(holdTime = 0) {

@@ -1,18 +1,24 @@
 import { tweens } from '@alexfdr/three-game-components';
-import { factory } from '../helpers/pixi/pixi-factory';
+import { Container } from 'pixi.js';
 import { RedOverlay } from '../helpers/ui/red-overlay';
 
-export class UI {
-    constructor(visible = false) {
-        this.group = factory.group([], visible);
-
+export class UIScreen {
+    constructor({ parent, visible = false }) {
+        this.group = new Container({
+            parent,
+            visible,
+            label: 'ui',
+            children: [],
+        });
         this.addRedOverlay();
     }
 
     addRedOverlay() {
-        this.redOverlay = new RedOverlay();
-        this.redOverlay.init({ time: 500, delay: 200 });
-        this.group.addChild(this.redOverlay.group);
+        this.redOverlay = new RedOverlay({ parent: this.group });
+        this.redOverlay.init({
+            time: 500,
+            delay: 200,
+        });
     }
 
     show() {
@@ -27,19 +33,14 @@ export class UI {
         tweens.fadeIn(this.group, 300);
     }
 
-    orientationPortrait(cx, cy) {
+    handlePortrait() {
         this.group.scale.set(1);
-
-        this.redOverlay.sprite.width = 960;
-
-        this.group.position.set(cx, cy);
+        this.redOverlay.sprite.width = 1024;
     }
 
-    orientationLandscape(cx, cy, factor) {
+    handleLandscape(factor) {
         this.group.scale.set(factor);
-
-        this.redOverlay.sprite.width = 960 / this.group.scale.x;
-
-        this.group.position.set(cx, cy);
+        this.redOverlay.sprite.width = 1024 / this.group.scale.x;
+        this.redOverlay.sprite.height = 1024;
     }
 }
