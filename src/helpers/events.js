@@ -20,7 +20,7 @@ class EventEmitter {
         const id = this.pool[name].length;
 
         this.pool[name].push((...params) => {
-            listener(params);
+            listener(...params);
             this.pool[name].splice(id, 1);
         });
 
