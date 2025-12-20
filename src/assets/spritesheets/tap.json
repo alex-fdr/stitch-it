@@ -1,0 +1,227 @@
+{
+    "frames": {
+        "tap-pointer00": {
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 256,
+                "h": 256
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 256,
+                "h": 256
+            },
+            "sourceSize": {
+                "w": 256,
+                "h": 256
+            },
+            "pivot": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        "tap-pointer01": {
+            "frame": {
+                "x": 256,
+                "y": 0,
+                "w": 256,
+                "h": 256
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 256,
+                "h": 256
+            },
+            "sourceSize": {
+                "w": 256,
+                "h": 256
+            },
+            "pivot": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        "tap-pointer02": {
+            "frame": {
+                "x": 512,
+                "y": 0,
+                "w": 256,
+                "h": 256
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 256,
+                "h": 256
+            },
+            "sourceSize": {
+                "w": 256,
+                "h": 256
+            },
+            "pivot": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        "tap-pointer03": {
+            "frame": {
+                "x": 768,
+                "y": 0,
+                "w": 256,
+                "h": 256
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 256,
+                "h": 256
+            },
+            "sourceSize": {
+                "w": 256,
+                "h": 256
+            },
+            "pivot": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        "tap-pointer04": {
+            "frame": {
+                "x": 1024,
+                "y": 0,
+                "w": 256,
+                "h": 256
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 256,
+                "h": 256
+            },
+            "sourceSize": {
+                "w": 256,
+                "h": 256
+            },
+            "pivot": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        "tap-pointer05": {
+            "frame": {
+                "x": 1280,
+                "y": 0,
+                "w": 256,
+                "h": 256
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 256,
+                "h": 256
+            },
+            "sourceSize": {
+                "w": 256,
+                "h": 256
+            },
+            "pivot": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        "tap-pointer06": {
+            "frame": {
+                "x": 1536,
+                "y": 0,
+                "w": 256,
+                "h": 256
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 256,
+                "h": 256
+            },
+            "sourceSize": {
+                "w": 256,
+                "h": 256
+            },
+            "pivot": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        "tap-pointer07": {
+            "frame": {
+                "x": 1792,
+                "y": 0,
+                "w": 256,
+                "h": 256
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 256,
+                "h": 256
+            },
+            "sourceSize": {
+                "w": 256,
+                "h": 256
+            },
+            "pivot": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        }
+    },
+    "animations": {
+        "tap": [
+            "tap-pointer00",
+            "tap-pointer01",
+            "tap-pointer02",
+            "tap-pointer03",
+            "tap-pointer04",
+            "tap-pointer05",
+            "tap-pointer06",
+            "tap-pointer07",
+            "tap-pointer07",
+            "tap-pointer06",
+            "tap-pointer05",
+            "tap-pointer04",
+            "tap-pointer03",
+            "tap-pointer02",
+            "tap-pointer01",
+            "tap-pointer00"
+        ]
+    },
+    "meta": {
+        "app": "http://free-tex-packer.com",
+        "version": "0.6.7",
+        "image": "tap.png",
+        "format": "RGBA8888",
+        "size": {
+            "w": 2048,
+            "h": 256
+        },
+        "scale": 1
+    }
+}

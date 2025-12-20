@@ -5,30 +5,20 @@ import { AnimatedSprite, Assets, Container } from 'pixi.js';
 // TODO: Rewrite hint logic, make code looks less ugly
 
 export class HintTap {
-    constructor(visible = false) {
-        const pointerTextures = [];
-
-        for (let i = 0; i <= 7; i++) {
-            pointerTextures.push(Assets.get(`tap-pointer0${i}`));
-        }
-
+    constructor({ parent, visible = false }) {
         this.pointer = new AnimatedSprite({
             anchor: 0.5,
-            textures: pointerTextures,
+            scale: 0.8,
+            animationSpeed: 0.7,
+            loop: false,
+            autoPlay: false,
+            textures: [0, 1, 2, 3, 4, 5, 6, 7, 7, 6, 5, 4, 3, 2, 1, 0].map((v) =>
+                Assets.get(`tap-pointer0${v}`),
+            ),
         });
-        // this.pointer = factory.animatedSprite({
-        //     key: 'tap-pointer',
-        //     speed: 0.8,
-        //     loop: false,
-        //     yoyo: true,
-        //     autostart: false,
-        //     frames: { from: 0, to: 7, digits: 2 },
-        //     // remapFrames: { 1: [9], 2: [8], 3: [7], 4: [6] }
-        // });
-
-        this.pointer.scale.set(0.8);
 
         this.group = new Container({
+            parent,
             visible,
             children: [this.pointer],
         });
@@ -77,26 +67,22 @@ export class HintTap {
         this.tap();
 
         this.pointer.onFrameChange = (frame) => {
-            // pointer pressing btn for some time
+            // pointer holding btn for some time
             if (frame === 8 && this.status.playing) {
                 this.hold();
             }
         };
 
         this.pointer.onComplete = () => {
-            // tweens.timeout(100, () => {
             this.moveToNextItem(() => {
                 if (this.status.playing) {
                     this.tap();
                 }
             });
-            // })
         };
     }
 
     tap() {
-        // console.log('hint tap', performance.now());
-
         this.status.playing = true;
         this.pointer.gotoAndPlay(0);
         this.onPress.dispatch(this.tapIndex);
@@ -149,14 +135,12 @@ export class HintTap {
         this.setPositionByIndex(0);
     }
 
-    handlePortrait(cx, cy) {
+    handlePortrait() {
         this.group.scale.set(1);
-        this.group.position.set(cx, cy);
     }
 
-    handleLandscape(cx, cy, factor) {
+    handleLandscape(factor) {
         this.group.scale.set(factor);
-        this.group.position.set(cx, cy);
     }
 
     setPosition(x, y) {
