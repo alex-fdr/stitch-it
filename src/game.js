@@ -90,17 +90,14 @@ export class Game {
         core.onUpdate.add(this.update, this);
         core.onResize.add(this.resize, this);
 
-        pixiUI.renderer.events.setTargetElement(core.renderer.domElement);
-
         const levelName = cfg.get('levels')[0];
-        const { stage, screens } = pixiUI;
-        const { stitchType, colors } = levelMediator.getLevelData(levelName).choices;
-        const screenProps = { parent: stage, visible: false };
+        const screenProps = { parent: pixiUI.stage, visible: false };
+        const { choices } = levelMediator.levelsData[levelName];
 
-        screens.set('ui', new UIScreen(screenProps));
-        screens.set('tutorial', new TutorialScreen(screenProps));
-        screens.set('choices', new ChoicesScreen({ ...screenProps, type: stitchType, colors }));
-        screens.set('hint', new HintTap(screenProps));
+        pixiUI.screens.set('ui', new UIScreen(screenProps));
+        pixiUI.screens.set('tutorial', new TutorialScreen(screenProps));
+        pixiUI.screens.set('choices', new ChoicesScreen({ ...screenProps, ...choices }));
+        pixiUI.screens.set('hint', new HintTap(screenProps));
 
         levelMediator.loadLevel(levelName);
         htmlScreens.hide('loading');
@@ -120,7 +117,7 @@ export class Game {
     }
 
     resize(width, height) {
-        levelMediator?.resize(width, height);
+        levelMediator.resize(width, height);
         pixiUI.resize(width, height);
     }
 
