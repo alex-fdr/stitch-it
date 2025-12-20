@@ -34,17 +34,10 @@ import imageParticleBlue from './assets/images/particles/particle-blue.png';
 import imageParticleGreen from './assets/images/particles/particle-green.png';
 import imageParticleOrange from './assets/images/particles/particle-orange.png';
 import imageParticlePurple from './assets/images/particles/particle-purple.png';
-import imageTap00 from './assets/images/tap/tap-pointer00.png';
-import imageTap01 from './assets/images/tap/tap-pointer01.png';
-import imageTap02 from './assets/images/tap/tap-pointer02.png';
-import imageTap03 from './assets/images/tap/tap-pointer03.png';
-import imageTap04 from './assets/images/tap/tap-pointer04.png';
-import imageTap05 from './assets/images/tap/tap-pointer05.png';
-import imageTap06 from './assets/images/tap/tap-pointer06.png';
-import imageTap07 from './assets/images/tap/tap-pointer07.png';
+import spritesheetTapJson from './assets/spritesheets/tap.json?url';
 
 import { levelMediator } from './level-mediator';
-import { debug } from '@alexfdr/three-debug-gui';
+// import { debug } from '@alexfdr/three-debug-gui';
 import { UIScreen } from './screens/ui';
 import { TutorialScreen } from './screens/tutorial';
 import { ChoicesScreen } from './screens/choices';
@@ -91,14 +84,7 @@ export class Game {
             { alias: 'particle-green', src: imageParticleGreen },
             { alias: 'particle-orange', src: imageParticleOrange },
             { alias: 'particle-purple', src: imageParticlePurple },
-            { alias: 'tap-pointer00', src: imageTap00 },
-            { alias: 'tap-pointer01', src: imageTap01 },
-            { alias: 'tap-pointer02', src: imageTap02 },
-            { alias: 'tap-pointer03', src: imageTap03 },
-            { alias: 'tap-pointer04', src: imageTap04 },
-            { alias: 'tap-pointer05', src: imageTap05 },
-            { alias: 'tap-pointer06', src: imageTap06 },
-            { alias: 'tap-pointer07', src: imageTap07 },
+            { src: spritesheetTapJson },
         ]);
 
         core.onUpdate.add(this.update, this);
