@@ -11,6 +11,8 @@ export class CameraHelper {
         this.offset = new Vector3();
         this.position = new Vector3();
         this.lerpSpeed = 0.5;
+
+        this.init();
     }
 
     init() {
