@@ -3,43 +3,38 @@ import * as levels from './data/levels';
 
 class LevelMediator {
     constructor() {
-        this.levels = {
+        this.levelsData = {
             avocadoLevel: levels.avocadoLevel,
             penguinLevel: levels.penguinLevel,
         };
-        // this.instances = [];
-        this.levelInstance = null;
-    }
-    getLevelData(name) {
-        return this.levels[name];
+
+        this.currentLevel = null;
     }
 
     loadLevel(name) {
-        console.log('load level', name);
-        const level = this.levels[name];
+        const level = this.levelsData[name];
 
         if (!level) {
             console.warn(`Level ${name} not found`);
         }
 
-        console.info(`Loading level: ${name}`);
+        console.log(`loading level: ${name}`);
 
-        if (this.levelInstance) {
-            this.levelInstance.remove();
+        if (this.currentLevel) {
+            this.currentLevel.remove();
+            this.currentLevel = null;
         }
 
-        this.levelInstance = new LevelInstance();
-        this.levelInstance.init(level);
+        this.currentLevel = new LevelInstance();
+        this.currentLevel.init(level);
     }
 
     update(dt) {
-        if (this.levelInstance) {
-            this.levelInstance.update(dt);
-        }
+        this.currentLevel?.update(dt);
     }
 
     resize(width, height) {
-        this.levelInstance.resize(width, height);
+        this.currentLevel?.resize(width, height);
     }
 }
 
