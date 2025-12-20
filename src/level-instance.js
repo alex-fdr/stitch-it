@@ -21,8 +21,12 @@ export class LevelInstance {
         this.group.name = 'level';
         core.scene.add(this.group);
 
-        this.data = null;
-        this.screens = pixiUI.screens;
+        this.screens = {
+            ui: pixiUI.screens.get('ui'),
+            hint: pixiUI.screens.get('hint'),
+            choices: pixiUI.screens.get('choices'),
+            tutorial: pixiUI.screens.get('tutorial'),
+        };
 
         this.status = {
             firstInteraction: true,
@@ -37,13 +41,11 @@ export class LevelInstance {
         };
     }
 
-    init(data) {
-        this.data = data;
-
+    init({ element, sewingMachine }) {
         this.addJeans();
-        this.addElement(data.element);
-        this.addSewingMachine(data.sewingMachine);
-        this.addPatchesCollection(data.sewingMachine);
+        this.addElement(element);
+        this.addSewingMachine(sewingMachine);
+        this.addPatchesCollection(sewingMachine);
         this.addCameraHelper();
         this.addPathSparkleEffect();
         this.addTutorialOverlay();
@@ -53,7 +55,7 @@ export class LevelInstance {
         this.setupHint();
         this.setupGameFlow();
 
-        this.start();
+        this.start(sewingMachine.routes[0].correctColor);
     }
 
     addJeans() {
@@ -107,14 +109,13 @@ export class LevelInstance {
     }
 
     setupHint() {
-        this.hint = this.screens.get('hint');
-        this.hint.setTapPositions(this.screens.get('choices').getBtnPositions());
-        this.hint.moveToStart();
+        this.screens.hint.setTapPositions(this.screens.choices.getBtnPositions());
+        this.screens.hint.moveToStart();
     }
 
     setupGameFlow() {
         events.on(WRONG_COLOR, () => {
-            this.screens.get('ui').redOverlay.animate();
+            this.screens.ui.redOverlay.animate();
         });
 
         events.on(PATCH_COMPLETE, (isCorrect) => {
@@ -131,18 +132,18 @@ export class LevelInstance {
             this.handleGameover(isWin);
         });
 
-        this.screens.get('choices').onBtnPress.add((type, color) => {
+        this.screens.choices.onBtnPress.add((type, color) => {
             this.status.btnPressed = true;
             this.status.selectedColor = color;
             this.status.btnPressedTime = performance.now();
         });
 
-        // this.hint.onPress.add((index) => {
-        //     this.screens.get('choices').pressBtn(index, this.hint.holdTime - 100);
+        // this.screens.hint.onPress.add((index) => {
+        //     this.screens.choices.pressBtn(index, this.screens.hint.holdTime - 100);
         // });
 
-        // this.hint.onStop.add((index) => {
-        //     this.screens.get('choices').resetBtn(index);
+        // this.screens.hint.onStop.add((index) => {
+        //     this.screens.choices.resetBtn(index);
         // });
 
         this.intro.onStart.addOnce(() => {
@@ -150,24 +151,23 @@ export class LevelInstance {
         });
 
         this.intro.onComplete.addOnce(() => {
-            this.screens.get('tutorial').show();
+            this.screens.tutorial.show();
 
             this.status.intro = false;
             // GM.trigger.start();
             this.overlay.show();
 
             // customEvents.introEnd();
-            this.screens.get('choices').show();
-            this.hint.show();
+            this.screens.choices.show();
+            this.screens.hint.show();
         });
     }
 
-    start() {
+    start(initialColor) {
         this.sparkle.show(this.patchesCollection.getPathFollower(), 0.1);
 
         // todo: move color to the config
-        const colorName = this.data.sewingMachine.routes[0].correctColor;
-        this.setColor(colorName);
+        this.setColor(initialColor);
 
         this.patchesCollection.currentPatch.moveOnStart(this.sewingMachine.group);
 
@@ -182,7 +182,7 @@ export class LevelInstance {
         if (this.status.firstInteraction) {
             this.status.firstInteraction = false;
             this.overlay.hide();
-            this.screens.get('tutorial').hide();
+            this.screens.tutorial.hide();
         }
 
         this.handleBtnPress();
@@ -199,8 +199,8 @@ export class LevelInstance {
         if (this.status.btnPressed) {
             this.status.btnPressedTime = 0;
 
-            this.screens.get('choices').hide();
-            this.hint.hide();
+            this.screens.choices.hide();
+            this.screens.hint.hide();
             this.sewingMachine.activate();
             this.sparkle.hide();
             this.setColor(this.status.selectedColor);
@@ -228,7 +228,7 @@ export class LevelInstance {
 
         if (this.status.btnPressed) {
             this.status.btnPressed = false;
-            this.screens.get('choices').show();
+            this.screens.choices.show();
             this.sewingMachine.deactivate();
             this.sparkle.show(this.patchesCollection.getPathFollower());
         }
@@ -242,9 +242,9 @@ export class LevelInstance {
         this.sewingMachine.deactivate();
         this.sewingMachine.hide();
 
-        this.screens.get('choices').disable();
-        this.screens.get('hint').deactivate();
-        this.screens.get('ui').hide();
+        this.screens.choices.disable();
+        this.screens.hint.deactivate();
+        this.screens.ui.hide();
 
         this.cameraHelper.focusOnTarget(this.element.model, 1000, () => {
             if (isWin) {
