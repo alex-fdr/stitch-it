@@ -1,4 +1,9 @@
-import { MeshBasicMaterial, MeshLambertMaterial, MeshPhongMaterial, MeshStandardMaterial } from 'three';
+import {
+    MeshBasicMaterial,
+    MeshLambertMaterial,
+    MeshPhongMaterial,
+    MeshStandardMaterial,
+} from 'three';
 
 const cache = {};
 
@@ -15,9 +20,13 @@ export function getMaterialByColor(color, type = 'lambert') {
 
 function createMaterial(color, type) {
     switch (type) {
-        case 'lambert': return new MeshLambertMaterial({ color });
-        case 'phong': return new MeshPhongMaterial({ color });
-        case 'basic': return new MeshBasicMaterial({ color });
-        case 'standard': return new MeshStandardMaterial({ color });
+        case 'lambert':
+            return new MeshLambertMaterial({ color });
+        case 'phong':
+            return new MeshPhongMaterial({ color });
+        case 'basic':
+            return new MeshBasicMaterial({ color });
+        case 'standard':
+            return new MeshStandardMaterial({ color });
     }
 }

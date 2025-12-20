@@ -8,9 +8,7 @@ export class RedOverlay {
             visible: false,
             anchor: 0.5,
         });
-        // this.sprite.visible = false;
-        // this.sprite.alpha = 0.5
-        // this.group = factory.group([this.sprite]);
+
         this.group = new Container({
             parent,
             children: [this.sprite],

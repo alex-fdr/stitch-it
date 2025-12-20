@@ -1,11 +1,26 @@
-import { tweens } from '@alexfdr/three-game-components';
-import { factory } from '../../helpers/pixi/pixi-factory';
+import { Assets, Container, Sprite, Text, TilingSprite } from 'pixi.js';
+import { locale } from '../../data/locale';
 
 export class Button {
     constructor(spriteKey, textKey, textStyle) {
-        this.sprite = factory.sprite(spriteKey);
-        this.text = factory.text(textKey, textStyle);
-        this.group = factory.group([this.sprite, this.text]);
+        this.sprite = new Sprite({
+            texture: Assets.get(spriteKey),
+            anchor: 0.5,
+        });
+
+        this.text = new Text({
+            text: locale[textKey].text,
+            anchor: 0.5,
+            style: {
+                fontSize: locale[textKey].fontSize,
+                ...textStyle,
+            },
+        });
+
+        this.group = new Container({
+            label: 'button',
+            children: [this.sprite, this.text],
+        });
     }
 
     getPosition() {
@@ -21,7 +36,10 @@ export class Button {
     }
 
     setTextShadow(alpha = 0.5, distance = 2, angle = 45) {
-        factory.textShadow(this.text, 0x222222, alpha, distance, angle);
+        this.text.style.dropShadow.alpha = alpha;
+        this.text.style.dropShadow.distance = distance;
+        this.text.style.dropShadow.angle = angle;
+        this.text.style.dropShadow.color = 0x222222;
     }
 
     setInputHandler(handler) {
@@ -35,10 +53,14 @@ export class Button {
 
     expandClickArea(props = {}) {
         const { width = 480, height = 960, positionX = 0, positionY = 0 } = props;
-        const area = factory.tilesprite('dummy-white', width, height);
-        area.position.set(positionX, positionY);
-        area.anchor.set(0.5);
-        area.alpha = 0.5;
-        this.group.add(area);
+        return new TilingSprite({
+            width,
+            height,
+            anchor: 0.5,
+            alpha: 0.5,
+            position: { x: positionX, y: positionY },
+            texture: Assets.get('dummy-white'),
+            parent: this.group,
+        });
     }
 }
