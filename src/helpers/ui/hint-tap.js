@@ -90,7 +90,7 @@ export class HintTap {
 
     hold() {
         this.pointer.stop();
-        this.holdTween = tweens.wait(this.holdTime).then(() => {
+        tweens.wait(this.holdTime).then(() => {
             if (this.status.playing && !this.status.stopped) {
                 this.pointer.play();
             }
@@ -110,12 +110,6 @@ export class HintTap {
             tweens.remove(this.moveTween);
             this.moveTween.stop();
             this.moveTween = null;
-        }
-
-        if (this.holdTween) {
-            tweens.remove(this.holdTween);
-            this.holdTween.stop();
-            this.holdTween = null;
         }
     }
 
