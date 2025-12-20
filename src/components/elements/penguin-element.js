@@ -4,6 +4,7 @@ import { AvocadoElement } from './avocado-element';
 export class PenguinElement extends AvocadoElement {
     addModel() {
         this.model = assets.models.get('penguin');
+        this.model.name = 'penguin-model';
         this.group.add(this.model);
     }
 
@@ -22,7 +23,7 @@ export class PenguinElement extends AvocadoElement {
         const face = this.model.getObjectByName('face');
         face.scale.y *= 1.2;
 
-        const heart = this.model.getObjectByName('heart');
+        // const heart = this.model.getObjectByName('heart');
         // heart.scale.y *= 2
 
         const black = this.model.getObjectByName('black');

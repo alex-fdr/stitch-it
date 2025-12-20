@@ -3,17 +3,12 @@ import { Object3D } from 'three';
 import { materials } from '../../helpers/materials';
 
 export class AvocadoElement {
-    constructor() {
-        this.parent = null;
-        this.model = null;
+    constructor({ parent, data }) {
+        this.parent = parent;
         this.group = new Object3D();
         this.group.name = 'avocado-group';
-        this.objectsToSkip = [];
-    }
-
-    init(parent, data = {}) {
-        this.parent = parent;
         this.parent.add(this.group);
+        this.objectsToSkip = [];
 
         this.addModel(data);
         this.setupMaterials();
@@ -21,7 +16,7 @@ export class AvocadoElement {
         this.defineObjectsToSkip();
     }
 
-    addModel(data) {
+    addModel() {
         this.model = assets.models.get('avocado');
         this.model.name = 'avocado-model';
         this.group.add(this.model);

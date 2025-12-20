@@ -2,32 +2,31 @@ import { tweens } from '@alexfdr/three-game-components';
 import { Signal } from '@alexfdr/three-game-core';
 
 export class Intro {
-    constructor() {
-        this.onStart = new Signal();
-        this.onComplete = new Signal();
-    }
-
-    init(data = {}) {
-        const { time = 1000, progress = 0.065 } = data;
+    constructor({ time = 500, progress = 0.1 }) {
         this.time = time;
         this.progress = progress;
+
+        this.onStart = new Signal();
+        this.onComplete = new Signal();
+
+        this.tween = null;
     }
 
     start(pathFollower) {
         this.onStart.dispatch();
 
-        const from = { x: 0 };
-        const tw = tweens.add(from, {
+        const dummyTarget = { x: 0 };
+        this.tween = tweens.add(dummyTarget, {
             to: { x: this.progress },
             easing: 'linear',
             time: this.time,
         });
 
-        tw.onUpdate((obj) => {
+        this.tween.onUpdate((obj) => {
             pathFollower.progress = obj.x;
         });
 
-        tw.onComplete(() => {
+        this.tween.onComplete(() => {
             this.onComplete.dispatch();
         });
     }

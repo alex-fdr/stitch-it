@@ -2,12 +2,9 @@ import { tweens } from '@alexfdr/three-game-components';
 import { DoubleSide, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry } from 'three';
 
 export class OverlayPlane {
-    constructor() {
+    constructor({ parent }) {
         this.group = new Object3D();
         this.group.name = 'Overlay';
-    }
-
-    init(parent) {
         this.parent = parent;
         this.parent.add(this.group);
 

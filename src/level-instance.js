@@ -1,7 +1,8 @@
 import { events, pixiUI, tweens } from '@alexfdr/three-game-components';
 import { core } from '@alexfdr/three-game-core';
 import { Object3D } from 'three';
-import { elementsFactory } from './components/elements';
+import { AvocadoElement } from './components/elements/avocado-element';
+import { PenguinElement } from './components/elements/penguin-element';
 import { Intro } from './components/intro';
 import { Jeans } from './components/jeans';
 import { OverlayPlane } from './components/overlay-plane';
@@ -56,46 +57,46 @@ export class LevelInstance {
     }
 
     addJeans() {
-        this.jeans = new Jeans();
-        this.jeans.init(this.group);
+        this.jeans = new Jeans({ parent: this.group });
     }
 
-    addElement(props) {
-        this.element = elementsFactory[props.model]();
-        this.element.init(this.group, props);
+    addElement(data) {
+        if (data.model === 'avocado') {
+            this.element = new AvocadoElement({ parent: this.group, data });
+        } else if (data.model === 'penguin') {
+            this.element = new PenguinElement({ parent: this.group, data });
+        }
     }
 
-    addSewingMachine(props) {
-        this.sewingMachine = new SewingMachine();
-        this.sewingMachine.init(this.group, props);
+    addSewingMachine(data) {
+        this.sewingMachine = new SewingMachine({ parent: this.group, data });
     }
 
-    addPatchesCollection(props) {
-        this.patchesCollection = new PatchesCollection();
-        this.patchesCollection.init(this.group, props);
+    addPatchesCollection(data) {
+        this.patchesCollection = new PatchesCollection({ parent: this.group, data });
     }
 
     addCameraHelper() {
         this.cameraHelper = new CameraHelper();
-        this.cameraHelper.init();
     }
 
     addPathSparkleEffect() {
-        this.sparkle = new PathSparkleEffect();
-        this.sparkle.init(this.group, {
+        this.sparkle = new PathSparkleEffect({
+            parent: this.group,
             movePercent: 0.1,
             moveTime: 2000,
         });
     }
 
     addTutorialOverlay() {
-        this.overlay = new OverlayPlane();
-        this.overlay.init(this.group);
+        this.overlay = new OverlayPlane({ parent: this.group });
     }
 
     addIntro() {
-        this.intro = new Intro();
-        this.intro.init({ time: cfg.get('intro.time', 500) });
+        this.intro = new Intro({
+            time: cfg.get('intro.time', 500),
+            progress: 0.065,
+        });
     }
 
     setupInput() {

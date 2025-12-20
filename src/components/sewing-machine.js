@@ -3,25 +3,19 @@ import { assets, Signal } from '@alexfdr/three-game-core';
 import { Object3D } from 'three';
 
 export class SewingMachine {
-    constructor() {
-        this.parent = null;
-        this.model = null;
+    constructor({ parent, data }) {
+        this.parent = parent;
         this.group = new Object3D();
         this.group.name = 'sewing-machine-group';
+        this.parent.add(this.group);
         this.onPathComplete = new Signal();
 
         this.status = {
             active: false,
             pathComplete: false,
         };
-    }
-
-    init(parent, data) {
-        this.parent = parent;
-        this.parent.add(this.group);
 
         this.addModel();
-
         this.setupMaterials();
         this.applyTransform(data);
     }

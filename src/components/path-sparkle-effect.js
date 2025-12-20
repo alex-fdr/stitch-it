@@ -3,16 +3,12 @@ import { assets } from '@alexfdr/three-game-core';
 import { DoubleSide, Mesh, MeshLambertMaterial, Object3D, PlaneGeometry } from 'three';
 
 export class PathSparkleEffect {
-    constructor() {
+    constructor({ parent, movePercent = 0.1, moveTime = 1000 }) {
+        this.parent = parent;
         this.group = new Object3D();
         this.group.name = 'sparkle-group';
-    }
-
-    init(parent, data = {}) {
-        this.parent = parent;
         this.parent.add(this.group);
 
-        const { movePercent = 0.1, moveTime = 1500 } = data;
         this.movePercent = movePercent;
         this.moveTime = moveTime;
 
@@ -56,6 +52,7 @@ export class PathSparkleEffect {
         this.group.visible = false;
 
         if (this.moveTween) {
+            tweens.remove(this.moveTween);
             this.moveTween.stop(true);
             this.moveTween = null;
         }
@@ -67,6 +64,7 @@ export class PathSparkleEffect {
         }
 
         if (this.moveTween) {
+            tweens.remove(this.moveTween);
             this.moveTween.stop(true);
             this.moveTween = null;
         }

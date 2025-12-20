@@ -4,25 +4,22 @@ import { cfg } from '../data/cfg';
 import { PATCHES_COMPLETE_ALL } from '../data/game-const';
 
 export class PatchesCollection {
-    constructor() {
+    constructor({ parent, data }) {
+        this.parent = parent;
+
         this.patches = [];
-        this.currentPatch = null;
         this.currentPatchId = 0;
 
         this.status = {
             correct: [],
             completed: [],
         };
-    }
 
-    init(parent, data) {
-        this.parent = parent;
-
-        const { routes } = data;
         const speed = cfg.get('sewingMachine.speed', data.speed);
-        routes.forEach((routeData) => {
+
+        for (const routeData of data.routes) {
             this.addPatch(routeData, speed);
-        });
+        }
 
         this.currentPatch = this.patches[this.currentPatchId];
     }
