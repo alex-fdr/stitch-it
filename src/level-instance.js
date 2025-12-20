@@ -1,5 +1,4 @@
-// import { sqHelper } from './helpers/system/sq-helper';
-import { pixiUI, tweens } from '@alexfdr/three-game-components';
+import { events, pixiUI, tweens } from '@alexfdr/three-game-components';
 import { core } from '@alexfdr/three-game-core';
 import { Object3D } from 'three';
 import { elementsFactory } from './components/elements';
@@ -10,7 +9,6 @@ import { PatchesCollection } from './components/patches-collection';
 import { PathSparkleEffect } from './components/path-sparkle-effect';
 import { SewingMachine } from './components/sewing-machine';
 import { DragHandler } from './helpers/drag-handler';
-import { events } from './helpers/events';
 import { CameraHelper } from './helpers/system/camera-helper';
 import { cfg } from './data/cfg';
 import { colors } from './data/colors';
@@ -138,13 +136,13 @@ export class LevelInstance {
             this.status.btnPressedTime = performance.now();
         });
 
-        this.hint.onPress.add((index) => {
-            this.screens.get('choices').pressBtn(index, this.hint.holdTime - 100);
-        });
+        // this.hint.onPress.add((index) => {
+        //     this.screens.get('choices').pressBtn(index, this.hint.holdTime - 100);
+        // });
 
-        this.hint.onStop.add((index) => {
-            this.screens.get('choices').resetBtn(index);
-        });
+        // this.hint.onStop.add((index) => {
+        //     this.screens.get('choices').resetBtn(index);
+        // });
 
         this.intro.onStart.addOnce(() => {
             this.status.intro = true;
@@ -159,6 +157,7 @@ export class LevelInstance {
 
             // customEvents.introEnd();
             this.screens.get('choices').show();
+            this.hint.show();
         });
     }
 
@@ -200,6 +199,7 @@ export class LevelInstance {
             this.status.btnPressedTime = 0;
 
             this.screens.get('choices').hide();
+            this.hint.hide();
             this.sewingMachine.activate();
             this.sparkle.hide();
             this.setColor(this.status.selectedColor);
@@ -227,7 +227,7 @@ export class LevelInstance {
 
         if (this.status.btnPressed) {
             this.status.btnPressed = false;
-            pixiUI.screens.get('choices').show();
+            this.screens.get('choices').show();
             this.sewingMachine.deactivate();
             this.sparkle.show(this.patchesCollection.getPathFollower());
         }
@@ -265,17 +265,13 @@ export class LevelInstance {
     }
 
     update(dt) {
-        if (this.status.intro) {
+        if (this.status.intro || this.sewingMachine.status.active) {
             this.patchesCollection.update(this.sewingMachine.group, this.element.objectsToSkip, dt);
         }
 
         if (this.status.btnPressedTime && performance.now() - this.status.btnPressedTime > 100) {
             this.status.btnPressed = true;
             this.handleBtnPress();
-        }
-
-        if (this.sewingMachine.status.active) {
-            this.patchesCollection.update(this.sewingMachine.group, this.element.objectsToSkip, dt);
         }
 
         if (!this.status.gameover) {
