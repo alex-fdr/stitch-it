@@ -1,4 +1,4 @@
-import { events, pixiUI, tweens } from '@alexfdr/three-game-components';
+import { events, input, pixiUI, tweens } from '@alexfdr/three-game-components';
 import { core } from '@alexfdr/three-game-core';
 import { Object3D } from 'three';
 import { AvocadoElement } from './components/elements/avocado-element';
@@ -9,7 +9,6 @@ import { OverlayPlane } from './components/overlay-plane';
 import { PatchesCollection } from './components/patches-collection';
 import { PathSparkleEffect } from './components/path-sparkle-effect';
 import { SewingMachine } from './components/sewing-machine';
-import { DragHandler } from './helpers/drag-handler';
 import { CameraHelper } from './helpers/system/camera-helper';
 import { cfg } from './data/cfg';
 import { colors } from './data/colors';
@@ -102,10 +101,9 @@ export class LevelInstance {
     }
 
     setupInput() {
-        core.input.setHandler(new DragHandler());
-        core.input.onDown.add((status) => this.handleOnDown(status));
-        core.input.onMove.add((status) => this.handleOnMove(status));
-        core.input.onUp.add((status) => this.handleOnUp(status));
+        input.onDown.add((status) => this.handleOnDown(status));
+        input.onMove.add((status) => this.handleOnMove(status));
+        input.onUp.add((status) => this.handleOnUp(status));
     }
 
     setupHint() {

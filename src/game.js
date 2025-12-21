@@ -6,7 +6,7 @@ import { assets, core } from '@alexfdr/three-game-core';
 // import { TutorialScreen } from './screens/tutorial';
 // import { UI } from './screens/ui';
 // import { Win } from './screens/win';
-import { htmlScreens, tweens, pixiUI } from '@alexfdr/three-game-components';
+import { htmlScreens, tweens, pixiUI, input, DragHandler } from '@alexfdr/three-game-components';
 import { gameSettings } from './data/game-settings';
 import { Assets as PixiAssets } from 'pixi.js';
 
@@ -51,6 +51,7 @@ export class Game {
 
     async start({ width, height }) {
         core.init(width, height, gameSettings);
+        input.init(core.renderer.domElement, new DragHandler());
 
         await assets.load({
             models: [
