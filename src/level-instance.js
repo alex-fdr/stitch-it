@@ -107,8 +107,7 @@ export class LevelInstance {
     }
 
     setupHint() {
-        this.screens.hint.setTapPositions(this.screens.choices.getBtnPositions());
-        this.screens.hint.moveToStart();
+        this.screens.hint.setupPointer(this.screens.choices.getBtnPositions());
     }
 
     setupGameFlow() {
@@ -136,11 +135,11 @@ export class LevelInstance {
             this.status.btnPressedTime = performance.now();
         });
 
-        // this.screens.hint.onPress.add((index) => {
-        //     this.screens.choices.pressBtn(index, this.screens.hint.holdTime - 100);
+        // this.screens.hint.pointer.onPress.add((index) => {
+        //     this.screens.choices.pressBtn(index, this.screens.hint.pointer.holdTime - 100);
         // });
 
-        // this.screens.hint.onStop.add((index) => {
+        // this.screens.hint.pointer.onStop.add((index) => {
         //     this.screens.choices.resetBtn(index);
         // });
 
@@ -241,7 +240,7 @@ export class LevelInstance {
         this.sewingMachine.hide();
 
         this.screens.choices.disable();
-        this.screens.hint.deactivate();
+        this.screens.hint.hide(true);
         this.screens.ui.hide();
 
         this.cameraHelper.focusOnTarget(this.element.model, 1000, () => {

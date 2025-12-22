@@ -1,11 +1,4 @@
 import { assets, core } from '@alexfdr/three-game-core';
-// import { HintTap } from './helpers/ui/hint-tap';
-// import { levelMediator } from './level-mediator';
-// import { Choices } from './screens/choices';
-// import { Lose } from './screens/lose';
-// import { TutorialScreen } from './screens/tutorial';
-// import { UI } from './screens/ui';
-// import { Win } from './screens/win';
 import { htmlScreens, tweens, pixiUI, input, DragHandler } from '@alexfdr/three-game-components';
 import { gameSettings } from './data/game-settings';
 import { Assets as PixiAssets } from 'pixi.js';
@@ -38,11 +31,14 @@ import spritesheetTapJson from './assets/spritesheets/tap.json?url';
 
 import { levelMediator } from './level-mediator';
 // import { debug } from '@alexfdr/three-debug-gui';
+// import { LoseScreen } from './screens/lose';
+// import { WinScreen } from './screens/win';
 import { UIScreen } from './screens/ui';
 import { TutorialScreen } from './screens/tutorial';
 import { ChoicesScreen } from './screens/choices';
 import { HintTap } from './helpers/ui/hint-tap';
 import { cfg } from './data/cfg';
+import { HintScreen } from './screens/hint';
 
 export class Game {
     constructor() {
@@ -98,7 +94,7 @@ export class Game {
         pixiUI.screens.set('ui', new UIScreen(screenProps));
         pixiUI.screens.set('tutorial', new TutorialScreen(screenProps));
         pixiUI.screens.set('choices', new ChoicesScreen({ ...screenProps, ...choices }));
-        pixiUI.screens.set('hint', new HintTap(screenProps));
+        pixiUI.screens.set('hint', new HintScreen(screenProps));
 
         levelMediator.loadLevel(levelName);
         htmlScreens.hide('loading');
