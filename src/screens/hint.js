@@ -22,7 +22,7 @@ export class HintScreen {
         tweens.fadeIn(this.group, { time: 300 });
 
         this.pointer.setPositionByIndex(0);
-        this.pointer.animate();
+        this.pointer.tap();
     }
 
     hide(keepActive = true) {

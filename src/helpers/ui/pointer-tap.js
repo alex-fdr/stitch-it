@@ -31,15 +31,8 @@ export class PointerTap {
 
         this.status = {
             playing: false,
-            stopped: false,
             active: true,
         };
-    }
-
-    animate() {
-        this.status.stopped = false;
-
-        this.tap();
 
         this.pointer.onFrameChange = this.onFrameChange.bind(this);
         this.pointer.onComplete = this.moveToNextItem.bind(this);
@@ -76,7 +69,7 @@ export class PointerTap {
     hold() {
         this.pointer.stop();
         tweens.wait(this.holdTime).then(() => {
-            if (this.status.playing && !this.status.stopped) {
+            if (this.status.playing) {
                 this.pointer.play();
             }
         });
@@ -84,7 +77,6 @@ export class PointerTap {
 
     stopAnimation() {
         this.status.playing = false;
-        this.status.stopped = true;
         this.pointer.onComplete = () => {};
         this.pointer.onFrameChange = () => {};
         this.pointer.gotoAndStop(0);
