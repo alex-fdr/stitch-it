@@ -36,9 +36,8 @@ import { levelMediator } from './level-mediator';
 import { UIScreen } from './screens/ui';
 import { TutorialScreen } from './screens/tutorial';
 import { ChoicesScreen } from './screens/choices';
-import { HintTap } from './helpers/ui/hint-tap';
-import { cfg } from './data/cfg';
 import { HintScreen } from './screens/hint';
+import { cfg } from './data/cfg';
 
 export class Game {
     constructor() {
