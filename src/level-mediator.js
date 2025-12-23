@@ -1,13 +1,10 @@
 import { LevelInstance } from './level-instance';
-import * as levels from './data/levels';
+import { avocadoLevel } from './data/levels/avocado-level';
+import { penguinLevel } from './data/levels/penguin-level';
 
 class LevelMediator {
     constructor() {
-        this.levelsData = {
-            avocadoLevel: levels.avocadoLevel,
-            penguinLevel: levels.penguinLevel,
-        };
-
+        this.levelsData = { avocadoLevel, penguinLevel };
         this.currentLevel = null;
     }
 

@@ -204,14 +204,14 @@ export class LevelInstance {
 
             // customEvents.stitchNum(++this.status.btnPressedCounter);
 
-            if (
-                this.status.btnPressedCounter === 1 &&
-                cfg.get('convert.firstInteractionComplete')
-            ) {
-                sqHelper.convertDelay(2000, () => {
-                    this.handleOnUp();
-                });
-            }
+            // if (
+            //     this.status.btnPressedCounter === 1 &&
+            //     cfg.get('convert.firstInteractionComplete')
+            // ) {
+            //     sqHelper.convertDelay(2000, () => {
+            //         this.handleOnUp();
+            //     });
+            // }
 
             if (this.status.nextPatch) {
                 this.status.nextPatch = false;
