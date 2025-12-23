@@ -23,10 +23,6 @@ export class Button {
         });
     }
 
-    getPosition() {
-        return this.group.position;
-    }
-
     setPosition(x = 0, y = 0) {
         this.group.position.set(x, y);
     }
@@ -36,10 +32,11 @@ export class Button {
     }
 
     setTextShadow(alpha = 0.5, distance = 2, angle = 45) {
-        this.text.style.dropShadow.alpha = alpha;
-        this.text.style.dropShadow.distance = distance;
-        this.text.style.dropShadow.angle = angle;
-        this.text.style.dropShadow.color = 0x222222;
+        const { dropShadow } = this.text.style;
+        dropShadow.alpha = alpha;
+        dropShadow.distance = distance;
+        dropShadow.angle = angle;
+        dropShadow.color = 0x222222;
     }
 
     setInputHandler(handler) {

@@ -1,12 +1,7 @@
 import { tweens } from '@alexfdr/three-game-components';
 import { Signal } from '@alexfdr/three-game-core';
 import { Container } from 'pixi.js';
-import { ButtonIcon } from '../helpers/ui/button-icon';
-
-// const BTN_POSITIONS = [
-//   { x: -120, y: 260 },
-//   { x: 120, y: 260 },
-// ]
+import { ButtonWithIcon } from '../helpers/ui/button-with-icon';
 
 export class ChoicesScreen {
     constructor({ parent, visible = false, type = 'yarn', colors = [] }) {
@@ -39,15 +34,13 @@ export class ChoicesScreen {
     }
 
     addButton(type, color, offsetIndex = 0) {
-        const btn = new ButtonIcon('button-base', `${type}-${color}`);
+        const btn = new ButtonWithIcon('button-base', `${type}-${color}`);
         const offsetX = type === 'yarn' ? 15 : 5;
         const offsetY = type === 'yarn' ? 0 : 5;
         const scaleTo = type === 'yarn' ? 0.7 : 0.6;
         btn.icon.scale.set(scaleTo);
         btn.icon.position.set(offsetX, offsetY);
-        btn.setInputHandler(() => {
-            this.onBtnPress.dispatch(type, color);
-        });
+        btn.setInputHandler(() => this.onBtnPress.dispatch(type, color));
         // btn.expandClickArea({ width: 480, positionX: 120 * offsetIndex, positionY: -260 })
         this.group.addChild(btn.group);
         return btn;

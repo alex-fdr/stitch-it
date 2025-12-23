@@ -1,24 +1,22 @@
 import { tweens } from '@alexfdr/three-game-components';
 import { Assets, Container, Sprite } from 'pixi.js';
 
-export class ButtonIcon {
+export class ButtonWithIcon {
     constructor(baseKey, iconKey) {
         this.base = new Sprite({
             texture: Assets.get(baseKey),
             anchor: 0.5,
             interactive: true,
         });
+
         this.icon = new Sprite({
             texture: Assets.get(iconKey),
             anchor: 0.5,
         });
+
         this.group = new Container({
             children: [this.base, this.icon],
         });
-    }
-
-    getPosition() {
-        return this.group.position;
     }
 
     setPosition(x = 0, y = 0) {
