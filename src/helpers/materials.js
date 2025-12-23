@@ -1,4 +1,9 @@
-import { MeshBasicMaterial, MeshLambertMaterial, MeshPhongMaterial, MeshStandardMaterial } from 'three';
+import {
+    MeshBasicMaterial,
+    MeshLambertMaterial,
+    MeshPhongMaterial,
+    MeshStandardMaterial,
+} from 'three';
 
 class MaterialManager {
     constructor() {
@@ -27,11 +32,16 @@ class MaterialManager {
 
     add(type, props = {}) {
         switch (type.toLowerCase()) {
-            case 'basic': return new MeshBasicMaterial(props);
-            case 'phong': return new MeshPhongMaterial(props);
-            case 'lambert': return new MeshLambertMaterial(props);
-            case 'standard': return new MeshStandardMaterial(props);
-            default: return new MeshLambertMaterial(props);
+            case 'basic':
+                return new MeshBasicMaterial(props);
+            case 'phong':
+                return new MeshPhongMaterial(props);
+            case 'lambert':
+                return new MeshLambertMaterial(props);
+            case 'standard':
+                return new MeshStandardMaterial(props);
+            default:
+                return new MeshLambertMaterial(props);
         }
     }
 
@@ -90,9 +100,8 @@ class MaterialManager {
 
     copyProperties(materialOld, materialNew, extraProps) {
         const applyProp = (material, key) => {
-            let value = (extraProps[key] || extraProps[key] >= 0)
-                ? extraProps[key]
-                : materialOld[key];
+            let value =
+                extraProps[key] || extraProps[key] >= 0 ? extraProps[key] : materialOld[key];
 
             if (key === 'map' && extraProps.map === null) {
                 value = extraProps.map;
@@ -106,7 +115,7 @@ class MaterialManager {
         };
 
         this.propsToCopy.forEach((key) => {
-            if (materialNew.hasOwnProperty(key)) {
+            if (Object.hasOwn(materialNew, key)) {
                 applyProp(materialNew, key);
             }
         });

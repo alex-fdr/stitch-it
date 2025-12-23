@@ -16,6 +16,7 @@ export class Intro {
         this.onStart.dispatch();
 
         const dummyTarget = { x: 0 };
+
         this.tween = tweens.add(dummyTarget, {
             to: { x: this.progress },
             easing: 'linear',

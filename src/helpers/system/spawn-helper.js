@@ -1,51 +1,51 @@
 export class SpawnHelper {
-  constructor(props = {}) {
-    const { total = 10, interval = 200 } = props
+    constructor(props = {}) {
+        const { total = 10, interval = 200 } = props;
 
-    this.spawnTotal = total
-    this.spawnInterval = interval
-    
-    this.prevTime = 0
-    this.spawnCounter = 0
-    
-    this.isCompleted = false
-    this.spawnFirstItemImmediatly = true
-  }
+        this.spawnTotal = total;
+        this.spawnInterval = interval;
 
-  start() {
-    if (this.isCompleted) {
-      return
+        this.prevTime = 0;
+        this.spawnCounter = 0;
+
+        this.isCompleted = false;
+        this.spawnFirstItemImmediatly = true;
     }
 
-    this.prevTime = performance.now()
+    start() {
+        if (this.isCompleted) {
+            return;
+        }
 
-    if (this.spawnFirstItemImmediatly) {
-      this.prevTime -= this.spawnInterval
-    }
-  }
+        this.prevTime = performance.now();
 
-  canSpawnNewObject() {
-    if (this.isCompleted) {
-      return false
-    }
-    
-    if (performance.now() - this.prevTime > this.spawnInterval) {
-      this.prevTime = performance.now()
-
-      this.spawnCounter += 1
-
-      if (this.spawnCounter > this.spawnTotal) {
-        this.isCompleted = true
-        return false
-      }
-
-      return true
+        if (this.spawnFirstItemImmediatly) {
+            this.prevTime -= this.spawnInterval;
+        }
     }
 
-    return false
-  }
+    canSpawnNewObject() {
+        if (this.isCompleted) {
+            return false;
+        }
 
-  isLastObjectSpawned() {
-    return this.spawnCounter >= this.spawnTotal
-  }
+        if (performance.now() - this.prevTime > this.spawnInterval) {
+            this.prevTime = performance.now();
+
+            this.spawnCounter += 1;
+
+            if (this.spawnCounter > this.spawnTotal) {
+                this.isCompleted = true;
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    isLastObjectSpawned() {
+        return this.spawnCounter >= this.spawnTotal;
+    }
 }
