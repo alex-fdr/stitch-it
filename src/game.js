@@ -12,22 +12,10 @@ import textureSparkle from './assets/textures/sparkle.png';
 
 // pixi.js images and fonts
 import gamefont from './assets/fonts/gamefont.woff';
-import imageButtonBase from './assets/images/button-base.png';
-import imageButton from './assets/images/button.png';
-import imageDummyWhite from './assets/images/dummy-white.png';
 import imageLogo from './assets/images/logo.png';
-import imageMarkGreen from './assets/images/mark-green.png';
-import imageMarkRed from './assets/images/mark-red.png';
 import imageOverlayRed from './assets/images/overlay-red.png';
-import imageThreadsPink from './assets/images/threads-pink.png';
-import imageThreadsWhite from './assets/images/threads-white.png';
-import imageYarnGreen from './assets/images/yarn-green.png';
-import imageYarnYellow from './assets/images/yarn-yellow.png';
-import imageParticleBlue from './assets/images/particles/particle-blue.png';
-import imageParticleGreen from './assets/images/particles/particle-green.png';
-import imageParticleOrange from './assets/images/particles/particle-orange.png';
-import imageParticlePurple from './assets/images/particles/particle-purple.png';
 import spritesheetTapJson from './assets/spritesheets/tap.json?url';
+import spritesheetAtlasJson from './assets/spritesheets/atlas.json?url';
 
 import { levelMediator } from './level-mediator';
 // import { debug } from '@alexfdr/three-debug-gui';
@@ -65,22 +53,10 @@ export class Game {
 
         await PixiAssets.load([
             { alias: 'gamefont', src: gamefont },
-            { alias: 'button-base', src: imageButtonBase },
-            { alias: 'button', src: imageButton },
-            { alias: 'dummy-white', src: imageDummyWhite },
             { alias: 'logo', src: imageLogo },
-            { alias: 'mark-green', src: imageMarkGreen },
-            { alias: 'mark-red', src: imageMarkRed },
             { alias: 'overlay-red', src: imageOverlayRed },
-            { alias: 'threads-pink', src: imageThreadsPink },
-            { alias: 'threads-white', src: imageThreadsWhite },
-            { alias: 'yarn-green', src: imageYarnGreen },
-            { alias: 'yarn-yellow', src: imageYarnYellow },
-            { alias: 'particle-blue', src: imageParticleBlue },
-            { alias: 'particle-green', src: imageParticleGreen },
-            { alias: 'particle-orange', src: imageParticleOrange },
-            { alias: 'particle-purple', src: imageParticlePurple },
             { src: spritesheetTapJson },
+            { src: spritesheetAtlasJson },
         ]);
 
         core.onUpdate.add(this.update, this);
