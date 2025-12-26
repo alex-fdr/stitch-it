@@ -31,14 +31,6 @@ export class Button {
         this.group.scale.set(sx, sy);
     }
 
-    setTextShadow(alpha = 0.5, distance = 2, angle = 45) {
-        const { dropShadow } = this.text.style;
-        dropShadow.alpha = alpha;
-        dropShadow.distance = distance;
-        dropShadow.angle = angle;
-        dropShadow.color = 0x222222;
-    }
-
     setInputHandler(handler) {
         this.sprite.interactive = true;
         this.sprite.once('pointerup', handler);
