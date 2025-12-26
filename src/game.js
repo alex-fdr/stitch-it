@@ -18,14 +18,14 @@ import spritesheetTapJson from './assets/spritesheets/tap.json?url';
 import spritesheetAtlasJson from './assets/spritesheets/atlas.json?url';
 
 import { levelMediator } from './level-mediator';
-// import { debug } from '@alexfdr/three-debug-gui';
-// import { LoseScreen } from './screens/lose';
-// import { WinScreen } from './screens/win';
 import { UIScreen } from './screens/ui';
 import { TutorialScreen } from './screens/tutorial';
 import { ChoicesScreen } from './screens/choices';
 import { HintScreen } from './screens/hint';
+import { WinScreen } from './screens/win';
+import { LoseScreen } from './screens/lose';
 import { cfg } from './data/cfg';
+// import { debug } from '@alexfdr/three-debug-gui';
 
 export class Game {
     constructor() {
@@ -70,6 +70,8 @@ export class Game {
         pixiUI.screens.set('tutorial', new TutorialScreen(screenProps));
         pixiUI.screens.set('choices', new ChoicesScreen({ ...screenProps, ...choices }));
         pixiUI.screens.set('hint', new HintScreen(screenProps));
+        pixiUI.screens.set('win', new WinScreen(screenProps));
+        pixiUI.screens.set('lose', new LoseScreen(screenProps));
 
         levelMediator.loadLevel(levelName);
         htmlScreens.hide('loading');

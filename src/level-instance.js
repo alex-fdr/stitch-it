@@ -25,6 +25,8 @@ export class LevelInstance {
             hint: pixiUI.screens.get('hint'),
             choices: pixiUI.screens.get('choices'),
             tutorial: pixiUI.screens.get('tutorial'),
+            lose: pixiUI.screens.get('lose'),
+            win: pixiUI.screens.get('win'),
         };
 
         this.status = {
@@ -246,10 +248,12 @@ export class LevelInstance {
         this.cameraHelper.focusOnTarget(this.element.model, 1000, () => {
             if (isWin) {
                 /* sqHelper.levelWin(); */
+                this.screens.win.show();
             } else {
                 this.patchesCollection.fallOffIncorrectColoredPatches(() => {
                     tweens.wait(200).then(() => {
                         /* sqHelper.levelLose(); */
+                        this.screens.lose.show();
                     });
                 });
             }
