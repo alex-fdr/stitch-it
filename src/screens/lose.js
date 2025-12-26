@@ -2,7 +2,7 @@ import { tweens } from '@alexfdr/three-game-components';
 import { Assets, Container, Sprite } from 'pixi.js';
 import { Button } from '../helpers/ui/button';
 
-export class Lose {
+export class LoseScreen {
     constructor({ parent, visible = false }) {
         this.overlay = new Sprite({
             texture: Assets.get('overlay-red'),
@@ -16,8 +16,13 @@ export class Lose {
         });
 
         this.button = new Button('button', 'tryAgain', { fill: '#ffffff' });
-        this.button.setTextShadow(0.5, 2, 45);
         this.button.text.position.set(0, 2);
+        this.button.text.style.dropShadow = {
+            alpha: 0.5,
+            distance: 2,
+            angle: 45,
+            color: 0x222222,
+        };
 
         this.group = new Container({
             parent,
@@ -42,7 +47,7 @@ export class Lose {
         this.group.visible = false;
     }
 
-    orientationPortrait() {
+    handlePortrait() {
         this.group.scale.set(1);
         this.overlay.width = 1024;
 
@@ -50,7 +55,7 @@ export class Lose {
         this.button.setPosition(0, 360);
     }
 
-    orientationLandscape(factor) {
+    handleLandscape(factor) {
         this.group.scale.set(factor);
         this.overlay.width = 1024 / this.group.scale.x;
 

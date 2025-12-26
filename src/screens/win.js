@@ -3,7 +3,7 @@ import { Assets, Container, Sprite, TilingSprite } from 'pixi.js';
 import { ParticlesEmitter } from '../helpers/particles2d/particles-emitter';
 import { Button } from '../helpers/ui/button';
 
-export class Win {
+export class WinScreen {
     constructor({ parent, visible = false }) {
         this.overlay = new TilingSprite({
             texture: Assets.get('dummy-white'),
@@ -21,8 +21,13 @@ export class Win {
         });
 
         this.button = new Button('button', 'nextPatch', { fill: '#ffffff' });
-        this.button.setTextShadow(0.5, 2, 45);
         this.button.text.position.set(0, 2);
+        this.button.text.style.dropShadow = {
+            alpha: 0.5,
+            distance: 2,
+            angle: 45,
+            color: 0x222222,
+        };
 
         this.addParticles();
 
@@ -85,7 +90,7 @@ export class Win {
         this.group.visible = false;
     }
 
-    orientationPortrait() {
+    handlePortrait() {
         this.group.scale.set(1);
         this.overlay.scale.set(1);
 
@@ -93,7 +98,7 @@ export class Win {
         this.button.setPosition(0, 360);
     }
 
-    orientationLandscape(factor) {
+    handleLandscape(factor) {
         this.group.scale.set(factor);
         this.overlay.scale.set(1 / this.group.scale.x);
 
