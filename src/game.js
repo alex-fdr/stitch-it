@@ -25,7 +25,6 @@ import { HintScreen } from './screens/hint';
 import { WinScreen } from './screens/win';
 import { LoseScreen } from './screens/lose';
 import { cfg } from './data/cfg';
-// import { debug } from '@alexfdr/three-debug-gui';
 
 export class Game {
     constructor() {
@@ -76,18 +75,6 @@ export class Game {
         levelMediator.loadLevel(levelName);
         htmlScreens.hide('loading');
         this.resize(width, height);
-
-        // if (new URLSearchParams(window.location.search).has('debug')) {
-        //     debug.init({
-        //         scene: core.scene,
-        //         canvas: core.renderer.domElement,
-        //         camera: core.camera,
-        //         options: {
-        //             scene: true,
-        //             props: true,
-        //         },
-        //     });
-        // }
     }
 
     resize(width, height) {
