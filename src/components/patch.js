@@ -1,22 +1,15 @@
 import { events } from '@alexfdr/three-game-components';
 import { PathFollower } from './path-follower';
 import { StitchesCollection } from './stitches-collection';
-import { colors } from '../data/colors';
-import { PATCH_COMPLETE } from '../data/game-const';
+import { COLORS, PATCH_COMPLETE } from '../data/game-const';
 
 export class Patch {
-    constructor() {
-        this.status = {
-            complete: false,
-        };
-    }
-
-    init(parent, routeData, moveSpeed) {
+    constructor({ parent, routeData, moveSpeed }) {
         this.parent = parent;
+        this.isComplete = false;
 
         const { correctColor: colorName, totalStitches, points } = routeData;
-        const color = colors[colorName];
-
+        const color = COLORS[colorName];
         this.addPathFollower(points, moveSpeed);
         this.addStitchesCollection(color, totalStitches);
     }
@@ -44,8 +37,8 @@ export class Patch {
     }
 
     addPathFollower(routePoints, speed) {
-        this.pathFollower = new PathFollower();
-        this.pathFollower.init(routePoints, {
+        this.pathFollower = new PathFollower({
+            points: routePoints,
             speed,
             reverseOnComplete: false,
             rotationOnMove: false,
@@ -53,8 +46,11 @@ export class Patch {
     }
 
     addStitchesCollection(correctColor, totalStitches) {
-        this.stitchesCollection = new StitchesCollection();
-        this.stitchesCollection.init(this.parent, { correctColor, totalStitches });
+        this.stitchesCollection = new StitchesCollection({
+            parent: this.parent,
+            correctColor,
+            totalStitches,
+        });
     }
 
     checkFinalResult() {
@@ -64,8 +60,8 @@ export class Patch {
     }
 
     update(objectToMove, objectsToSkip, dt) {
-        if (this.pathFollower.finished && !this.status.complete) {
-            this.status.complete = true;
+        if (this.pathFollower.finished && !this.isComplete) {
+            this.isComplete = true;
             this.checkFinalResult();
             console.log('path complete');
         }

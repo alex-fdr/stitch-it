@@ -6,36 +6,34 @@ import { utils2d } from '../helpers/utils2d';
 import { WRONG_COLOR } from '../data/game-const';
 
 export class StitchesCollection {
-    constructor() {
-        this.parent = null;
+    constructor({ parent, correctColor, totalStitches }) {
+        this.parent = parent;
+        this.correctColor = correctColor;
+        this.totalStitches = totalStitches;
+
         this.group = new Object3D();
         this.group.name = 'stitches-collection';
-        this.stitches = [];
-        this.localProgress = 0;
-        this.step = 1 / 50;
+        this.parent.add(this.group);
 
+        this.step = 1 / this.totalStitches;
+        this.localProgress = 0;
+        this.stitches = [];
         this.correctColored = [];
         this.incorrectColored = [];
+
+        this.raycaster = new Raycaster();
+        this.raycaster.near = 0;
+        this.raycaster.far = 10;
 
         // this.onWrongColor = new signals.Signal()
     }
 
-    init(parent, data) {
-        this.parent = parent;
-        this.parent.add(this.group);
-
-        const { correctColor, totalStitches } = data;
-        this.correctColor = correctColor;
-        this.totalStitches = totalStitches;
-        this.step = 1 / this.totalStitches;
-
-        this.addRaycaster();
-    }
-
     addStitch(position, shouldSkip) {
-        const stitch = new Stitch();
-        const material = getMaterialByColor(this.stitchColor);
-        stitch.init(this.group, { position, material });
+        const stitch = new Stitch({
+            parent: this.group,
+            material: getMaterialByColor(this.stitchColor),
+            position,
+        });
         this.stitches.push(stitch);
 
         if (shouldSkip) {
@@ -50,12 +48,6 @@ export class StitchesCollection {
             // this.onWrongColor.dispatch()
             events.emit(WRONG_COLOR);
         }
-    }
-
-    addRaycaster() {
-        this.raycaster = new Raycaster();
-        this.raycaster.near = 0;
-        this.raycaster.far = 10;
     }
 
     setColor(stitchColor) {

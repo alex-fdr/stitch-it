@@ -24,14 +24,16 @@ export class PatchesCollection {
         this.currentPatch = this.patches[this.currentPatchId];
     }
 
-    addPatch(routeData, speed) {
-        const patch = new Patch();
-        patch.init(this.parent, routeData, speed);
+    addPatch(routeData, moveSpeed) {
+        const patch = new Patch({
+            parent: this.parent,
+            routeData,
+            moveSpeed,
+        });
         this.patches.push(patch);
     }
 
     nextPatch(objectToMove) {
-        console.log('next patch');
         this.currentPatchId += 1;
 
         if (this.currentPatchId >= this.patches.length) {
@@ -59,11 +61,11 @@ export class PatchesCollection {
     checkFinalResult() {
         let isAllPatchesCorrect = true;
 
-        this.status.correct.forEach((isCorrect) => {
+        for (const isCorrect of this.status.correct) {
             if (!isCorrect) {
                 isAllPatchesCorrect = false;
             }
-        });
+        }
 
         events.emit(PATCHES_COMPLETE_ALL, isAllPatchesCorrect);
     }
@@ -71,9 +73,9 @@ export class PatchesCollection {
     fallOffIncorrectColoredPatches(callback) {
         this.status.correct.forEach((isCorrect, index) => {
             if (!isCorrect) {
-                this.patches[index].stitchesCollection.fallOffIncorrectColored(() => {
-                    callback();
-                });
+                const patch = this.patches[index];
+                const stitches = patch.stitchesCollection;
+                stitches.fallOffIncorrectColored(callback);
             }
         });
     }

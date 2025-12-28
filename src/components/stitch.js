@@ -3,20 +3,17 @@ import { Object3D } from 'three';
 import { cfg } from '../data/cfg';
 
 export class Stitch {
-    constructor() {
-        this.parent = null;
+    constructor({ parent, material, position }) {
+        this.parent = parent;
         this.model = null;
+
         this.group = new Object3D();
         this.group.name = 'stitch-group';
-    }
-
-    init(parent, data) {
-        this.parent = parent;
         this.parent.add(this.group);
 
-        this.addModel(data);
-        this.setupMaterials(data);
-        this.applyTransform(data);
+        this.addModel();
+        this.setupMaterials(material);
+        this.applyTransform(position);
     }
 
     addModel() {
@@ -25,17 +22,14 @@ export class Stitch {
         this.group.add(this.model);
     }
 
-    setupMaterials(props) {
-        const { material } = props;
-
+    setupMaterials(material) {
         if (material) {
             const stitch = this.model.getObjectByName('stitch');
             stitch.material = material;
         }
     }
 
-    applyTransform(props = {}) {
-        const { position } = props;
+    applyTransform(position) {
         const { x, y, z } = position;
         this.model.position.set(x, y, z);
         this.model.scale.multiplyScalar(1.3);

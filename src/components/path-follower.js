@@ -10,28 +10,18 @@ import {
 } from 'three';
 
 export class PathFollower {
-    constructor() {
-        this.points = [];
-        this.pathCurve = null;
-        this.pathMesh = null;
-        this.progress = 0;
-        this.speed = 0.03;
-        this.k = 0;
-        this.direction = 1;
-        this.finished = false;
-    }
-
-    init(points = [], data = {}) {
+    constructor({ points = [], speed = 1, reverseOnComplete = false, rotationOnMove = true }) {
         this.points = points.map(({ x, y, z }) => new Vector3(x, y, z));
         this.pathCurve = new CatmullRomCurve3(this.points);
-
         this.k = 1 / this.pathCurve.getLength();
-
-        const { speed = 1, reverseOnComplete = false, rotationOnMove = true } = data;
-
-        this.speed *= speed;
+        this.speed = speed * 0.03;
         this.reverseOnComplete = reverseOnComplete;
         this.rotationOnMove = rotationOnMove;
+
+        this.progress = 0;
+        this.direction = 1;
+        this.finished = false;
+        this.pathMesh = null;
     }
 
     debug() {
@@ -100,7 +90,7 @@ export class PathFollower {
     }
 
     updatePosition(target) {
-        const d = this.direction > 0 ? this.progress : 1 - this.progress;
+        // const d = this.direction > 0 ? this.progress : 1 - this.progress;
         const currentPosition = this.pathCurve.getPointAt(this.progress);
         target.position.copy(currentPosition);
     }
