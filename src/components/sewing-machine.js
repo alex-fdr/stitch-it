@@ -3,40 +3,29 @@ import { assets, Signal } from '@alexfdr/three-game-core';
 import { Object3D } from 'three';
 
 export class SewingMachine {
-    constructor({ parent, data }) {
+    constructor({ parent }) {
         this.parent = parent;
+
         this.group = new Object3D();
         this.group.name = 'sewing-machine-group';
         this.parent.add(this.group);
+
         this.onPathComplete = new Signal();
+        this.tweenNeedle = null;
 
         this.status = {
             active: false,
             pathComplete: false,
         };
 
-        this.addModel();
-        this.setupMaterials();
-        this.applyTransform(data);
-    }
-
-    addModel() {
         this.model = assets.models.get('sewing-machine');
         this.model.name = 'sewing-machine';
+        this.model.position.set(0, 0, 0);
         this.group.add(this.model);
 
         this.needle = this.model.getObjectByName('needle');
         this.needle.name = 'needle';
-    }
-
-    setupMaterials() {
         this.needle.material.color.setHex(0xffffff);
-    }
-
-    applyTransform(props = {}) {
-        const { position = {} } = props;
-        const { x = 0, y = 0, z = 0 } = position;
-        this.model.position.set(x, y, z);
     }
 
     setColor(color) {
@@ -61,10 +50,8 @@ export class SewingMachine {
     }
 
     checkFinalResult() {
-        const { correctColored, incorrectColored } = this.stitchesCollection;
+        const { incorrectColored } = this.stitchesCollection;
         const isAllStitchesCorrectColor = incorrectColored.length === 0;
-        console.log(correctColored.length, incorrectColored.length, isAllStitchesCorrectColor);
-
         this.onPathComplete.dispatch(isAllStitchesCorrectColor);
     }
 

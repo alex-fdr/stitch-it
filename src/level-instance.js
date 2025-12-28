@@ -44,7 +44,7 @@ export class LevelInstance {
     init({ element, sewingMachine: sewingData }) {
         this.addJeans();
         this.addElement(element);
-        this.addSewingMachine(sewingData);
+        this.addSewingMachine();
         this.addPatchesCollection(sewingData);
         this.addCameraHelper();
         this.addPathSparkleEffect();
@@ -75,9 +75,8 @@ export class LevelInstance {
         }
     }
 
-    addSewingMachine(data) {
+    addSewingMachine() {
         this.sewingMachine = new SewingMachine({
-            data,
             parent: this.group,
         });
     }
