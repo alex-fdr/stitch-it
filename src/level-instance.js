@@ -41,11 +41,11 @@ export class LevelInstance {
         };
     }
 
-    init({ element, sewingMachine }) {
+    init({ element, sewingMachine: sewingData }) {
         this.addJeans();
         this.addElement(element);
-        this.addSewingMachine(sewingMachine);
-        this.addPatchesCollection(sewingMachine);
+        this.addSewingMachine(sewingData);
+        this.addPatchesCollection(sewingData);
         this.addCameraHelper();
         this.addPathSparkleEffect();
         this.addTutorialOverlay();
@@ -55,27 +55,38 @@ export class LevelInstance {
         this.setupHint();
         this.setupGameFlow();
 
-        this.start(sewingMachine.routes[0].correctColor);
+        this.start(sewingData.routes[0].correctColor);
     }
 
     addJeans() {
-        this.jeans = new Jeans({ parent: this.group });
+        this.jeans = new Jeans({
+            parent: this.group,
+        });
     }
 
     addElement(data) {
-        if (data.model === 'avocado') {
-            this.element = new AvocadoElement({ parent: this.group, data });
-        } else if (data.model === 'penguin') {
-            this.element = new PenguinElement({ parent: this.group, data });
+        const props = { data, parent: this.group };
+        const { model } = data;
+
+        if (model === 'avocado') {
+            this.element = new AvocadoElement(props);
+        } else if (model === 'penguin') {
+            this.element = new PenguinElement(props);
         }
     }
 
     addSewingMachine(data) {
-        this.sewingMachine = new SewingMachine({ parent: this.group, data });
+        this.sewingMachine = new SewingMachine({
+            data,
+            parent: this.group,
+        });
     }
 
     addPatchesCollection(data) {
-        this.patchesCollection = new PatchesCollection({ parent: this.group, data });
+        this.patchesCollection = new PatchesCollection({
+            data,
+            parent: this.group,
+        });
     }
 
     addCameraHelper() {
@@ -91,7 +102,9 @@ export class LevelInstance {
     }
 
     addTutorialOverlay() {
-        this.overlay = new OverlayPlane({ parent: this.group });
+        this.overlay = new OverlayPlane({
+            parent: this.group,
+        });
     }
 
     addIntro() {
@@ -152,10 +165,8 @@ export class LevelInstance {
             this.screens.tutorial.show();
 
             this.status.intro = false;
-            // GM.trigger.start();
             this.overlay.show();
 
-            // customEvents.introEnd();
             this.screens.choices.show();
             this.screens.hint.show();
         });
@@ -175,8 +186,6 @@ export class LevelInstance {
     }
 
     handleOnDown(data) {
-        // GM.trigger.interactionStart();
-
         if (this.status.firstInteraction) {
             this.status.firstInteraction = false;
             this.overlay.hide();
@@ -189,7 +198,6 @@ export class LevelInstance {
     handleOnMove(data) {}
 
     handleOnUp(data) {
-        // GM.trigger.interactionComplete();
         this.handleBtnRelease();
     }
 
@@ -203,8 +211,6 @@ export class LevelInstance {
             this.sparkle.hide();
             this.setColor(this.status.selectedColor);
 
-            // customEvents.stitchNum(++this.status.btnPressedCounter);
-
             // if (
             //     this.status.btnPressedCounter === 1 &&
             //     cfg.get('convert.firstInteractionComplete')
@@ -216,7 +222,6 @@ export class LevelInstance {
 
             if (this.status.nextPatch) {
                 this.status.nextPatch = false;
-                // customEvents.areaStart(this.patchesCollection.status.completed.length + 1);
             }
         }
     }
