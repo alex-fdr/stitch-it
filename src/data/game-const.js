@@ -6,6 +6,13 @@ export const CAMERA_SETTINGS = {
     },
 };
 
+export const COLORS = {
+    green: 0x449016,
+    yellow: 0xcaca00,
+    white: 0x999999,
+    pink: 0xb733bf,
+};
+
 export const WRONG_COLOR = 'WRONG_COLOR';
 export const PATCH_COMPLETE = 'PATCH_COMPLETE';
 export const PATCHES_COMPLETE_ALL = 'PATCHES_COMPLETE_ALL';

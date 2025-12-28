@@ -11,8 +11,7 @@ import { PathSparkleEffect } from './components/path-sparkle-effect';
 import { SewingMachine } from './components/sewing-machine';
 import { CameraHelper } from './helpers/system/camera-helper';
 import { cfg } from './data/cfg';
-import { colors } from './data/colors';
-import { PATCH_COMPLETE, PATCHES_COMPLETE_ALL, WRONG_COLOR } from './data/game-const';
+import { COLORS, PATCH_COMPLETE, PATCHES_COMPLETE_ALL, WRONG_COLOR } from './data/game-const';
 
 export class LevelInstance {
     constructor() {
@@ -247,12 +246,10 @@ export class LevelInstance {
 
         this.cameraHelper.focusOnTarget(this.element.model, 1000, () => {
             if (isWin) {
-                /* sqHelper.levelWin(); */
                 this.screens.win.show();
             } else {
                 this.patchesCollection.fallOffIncorrectColoredPatches(() => {
                     tweens.wait(200).then(() => {
-                        /* sqHelper.levelLose(); */
                         this.screens.lose.show();
                     });
                 });
@@ -261,7 +258,7 @@ export class LevelInstance {
     }
 
     setColor(colorName) {
-        const color = colors[colorName];
+        const color = COLORS[colorName];
         this.sewingMachine.setColor(color);
         this.patchesCollection.getStitchesCollection().setColor(color);
     }
