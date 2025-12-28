@@ -4,14 +4,24 @@ import { StitchesCollection } from './stitches-collection';
 import { COLORS, PATCH_COMPLETE } from '../data/game-const';
 
 export class Patch {
-    constructor({ parent, routeData, moveSpeed }) {
+    constructor({ parent, routeData, speed }) {
         this.parent = parent;
         this.isComplete = false;
 
-        const { correctColor: colorName, totalStitches, points } = routeData;
-        const color = COLORS[colorName];
-        this.addPathFollower(points, moveSpeed);
-        this.addStitchesCollection(color, totalStitches);
+        const { correctColor, totalStitches, points } = routeData;
+
+        this.pathFollower = new PathFollower({
+            points,
+            speed,
+            reverseOnComplete: false,
+            rotationOnMove: false,
+        });
+
+        this.stitchesCollection = new StitchesCollection({
+            totalStitches,
+            parent: this.parent,
+            correctColor: COLORS[correctColor],
+        });
     }
 
     debug(objectsToSkip = []) {
@@ -36,23 +46,6 @@ export class Patch {
         this.pathFollower.updatePosition(objectToMove);
     }
 
-    addPathFollower(routePoints, speed) {
-        this.pathFollower = new PathFollower({
-            points: routePoints,
-            speed,
-            reverseOnComplete: false,
-            rotationOnMove: false,
-        });
-    }
-
-    addStitchesCollection(correctColor, totalStitches) {
-        this.stitchesCollection = new StitchesCollection({
-            parent: this.parent,
-            correctColor,
-            totalStitches,
-        });
-    }
-
     checkFinalResult() {
         const { incorrectColored } = this.stitchesCollection;
         const isAllStitchesCorrectColor = incorrectColored.length === 0;
@@ -63,7 +56,6 @@ export class Patch {
         if (this.pathFollower.finished && !this.isComplete) {
             this.isComplete = true;
             this.checkFinalResult();
-            console.log('path complete');
         }
 
         this.pathFollower.update(objectToMove, dt);

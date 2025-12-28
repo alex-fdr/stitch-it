@@ -7,30 +7,23 @@ export class PatchesCollection {
     constructor({ parent, data }) {
         this.parent = parent;
 
-        this.patches = [];
-        this.currentPatchId = 0;
-
         this.status = {
             correct: [],
             completed: [],
         };
 
         const speed = cfg.get('sewingMachine.speed', data.speed);
-
-        for (const routeData of data.routes) {
-            this.addPatch(routeData, speed);
-        }
-
+        this.currentPatchId = 0;
+        this.patches = data.routes.map((route) => this.makePatch(route, speed));
         this.currentPatch = this.patches[this.currentPatchId];
     }
 
-    addPatch(routeData, moveSpeed) {
-        const patch = new Patch({
+    makePatch(routeData, speed) {
+        return new Patch({
             parent: this.parent,
             routeData,
-            moveSpeed,
+            speed,
         });
-        this.patches.push(patch);
     }
 
     nextPatch(objectToMove) {
